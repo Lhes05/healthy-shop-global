@@ -37,9 +37,6 @@ button{font:inherit}
 .product-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:0 32px}
 .product-frame{width:min(100%,560px);border:9px solid #084d31;border-radius:31px;background:#fff;padding:9px;box-shadow:0 24px 50px rgba(7,75,47,.12);display:flex;align-items:center;justify-content:center}
 .product-frame img{display:block;width:100%;height:auto;max-height:760px;object-fit:contain;border-radius:21px}
-.slider-arrow{position:absolute;z-index:5;width:52px;height:52px;border:0;border-radius:50%;background:#087f45;color:#fff;font-size:44px;line-height:42px;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 22px rgba(0,0,0,.08)}
-.arrow-left{left:0}
-.arrow-right{right:0}
 .anchor-section{height:1px}
 @media(max-width:1180px){
   .wrap{padding:0 30px}
