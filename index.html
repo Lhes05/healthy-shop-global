@@ -3,57 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Healthy Shop Global</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #102018;
-    }
-
-    .hello {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 30px;
-    }
-
-    .hello h1 {
-      margin: 0;
-      font-size: 56px;
-    }
-
-    .hello h1 span {
-      color: #087f45;
-    }
-
-    .hello p {
-      color: #63716a;
-      font-size: 18px;
-      margin-top: 15px;
-    }
-  </style>
+  <meta name="description" content="Healthy Shop Global — Santé Everyday Wellness">
+  <title>Healthy Shop Global — Santé Everyday Wellness</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <main class="hello">
-    <div>
-      <h1>Healthy Shop <span>Global</span></h1>
-      <p>Santé Everyday Wellness</p>
+  <nav class="nav">
+    <div class="wrap navin">
+      <a class="brand" href="#top" aria-label="Santé Wellness home">
+        <img class="brandmark" src="assets/images/brand-logo.png" alt="Santé logo">
+        <span>SANTÉ <small>WELLNESS</small></span>
+      </a>
+
+      <div class="navlinks" aria-label="Main navigation">
+        <a href="#why">Why Santé</a>
+        <a href="#products">Products</a>
+        <a href="#wellness">Wellness</a>
+        <a href="#barley">Barley</a>
+        <a href="#stories">Stories</a>
+      </div>
+
+      <a class="navcta" href="#products">Shop Now →</a>
     </div>
+  </nav>
+
+  <main id="top">
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">SANTÉ EVERYDAY WELLNESS</div>
+          <h1>Better choices.<br><span>Better everyday.</span></h1>
+          <p>
+            Discover Santé wellness products for daily nutrition, coffee moments,
+            beauty and more — then choose the journey that fits you.
+          </p>
+
+          <div class="actions">
+            <a class="btn primary" href="#products">Explore Products →</a>
+            <a class="btn secondary" href="#why">Why Santé?</a>
+          </div>
+
+          <div class="hero-note">Healthy choices made simple, practical and everyday.</div>
+        </div>
+
+        <div class="hero-art">
+          <img src="assets/images/intro-pack.png" alt="Santé wellness product collection">
+        </div>
+      </div>
+    </header>
+
+    <!-- Section anchors reserved for the next build stages -->
+    <section id="why" aria-hidden="true"></section>
+    <section id="products" aria-hidden="true"></section>
+    <section id="wellness" aria-hidden="true"></section>
+    <section id="barley" aria-hidden="true"></section>
+    <section id="stories" aria-hidden="true"></section>
   </main>
 
 </body>
