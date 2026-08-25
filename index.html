@@ -107,10 +107,13 @@
       const img=document.getElementById('barleyWellnessImage');
       const dots=[...document.querySelectorAll('.barley-dot')];
       let current=0;
+      let autoplayTimer;
       function show(i){current=(i+photos.length)%photos.length;img.src=photos[current];img.onerror=function(){this.onerror=null;this.src='assets/images/product-barley-canister.png'};dots.forEach((d,n)=>d.classList.toggle('active',n===current));}
-      document.getElementById('barleyPrev').addEventListener('click',()=>show(current-1));
-      document.getElementById('barleyNext').addEventListener('click',()=>show(current+1));
-      dots.forEach((d,n)=>d.addEventListener('click',()=>show(n)));
+      function startAutoplay(){clearInterval(autoplayTimer);autoplayTimer=setInterval(()=>show(current+1),4000);}
+      document.getElementById('barleyPrev').addEventListener('click',()=>{show(current-1);startAutoplay();});
+      document.getElementById('barleyNext').addEventListener('click',()=>{show(current+1);startAutoplay();});
+      dots.forEach((d,n)=>d.addEventListener('click',()=>{show(n);startAutoplay();}));
+      startAutoplay();
     })();
   </script>
 </body>
