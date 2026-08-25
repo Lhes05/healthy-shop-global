@@ -7,16 +7,12 @@
   --muted:#4e5a55;
   --white:#fff;
 }
-
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fff}
 a{color:inherit;text-decoration:none}
 button{font:inherit}
-
 .wrap{width:min(1420px,100%);margin:0 auto;padding:0 48px}
-
-/* Navigation */
 .nav{position:relative;z-index:50;background:#fff;border-bottom:1px solid #e8eeea}
 .navin{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:28px}
 .brand{display:flex;align-items:center;gap:9px;min-width:220px;font-weight:950;color:var(--green-dark)}
@@ -31,8 +27,6 @@ button{font:inherit}
 .cart b{position:absolute;top:-3px;right:-6px;background:var(--green);color:#fff;font-size:10px;line-height:18px;width:18px;height:18px;border-radius:50%}
 .navcta,.hero-shop{background:var(--green);color:#fff;border-radius:999px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:12px}
 .navcta{padding:15px 24px;font-size:15px;min-width:174px}
-
-/* Hero */
 .hero{position:relative;overflow:hidden;min-height:calc(100vh - 88px);display:flex;align-items:center;background:linear-gradient(120deg,#ffffff 0%,#f5fbf7 55%,#edf8f0 100%);padding:55px 0 100px}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(500px,.98fr);gap:45px;align-items:center;position:relative;z-index:3}
 .hero-copy{padding:20px 0 50px}
@@ -41,43 +35,18 @@ button{font:inherit}
 .hero h1 span{color:#0a432d}
 .hero-lead{font-size:24px;line-height:1.55;color:#454f4a;max-width:680px;margin:0 0 30px}
 .hero-shop{padding:17px 31px;font-size:18px;min-width:210px;box-shadow:0 12px 26px rgba(8,127,69,.12)}
-
 .benefits{display:flex;gap:34px;margin-top:55px;align-items:flex-start}
 .benefit{display:flex;gap:14px;align-items:flex-start;min-width:170px}
 .benefit-icon{width:58px;height:58px;flex:0 0 58px;border-radius:50%;background:#e2f2cf;color:var(--green-dark);display:grid;place-items:center;font-size:32px;font-weight:800}
 .benefit strong{display:block;color:#163b2a;font-size:16px;margin:5px 0 7px}
 .benefit span{display:block;color:#4e5853;font-size:15px;line-height:1.45}
-
-/* Product card: keep the entire supplied artwork visible */
 .product-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:0 32px}
 .product-frame{width:min(100%,560px);border:9px solid #084d31;border-radius:31px;background:#fff;padding:9px;box-shadow:0 24px 50px rgba(7,75,47,.12);display:flex;align-items:center;justify-content:center}
 .product-frame img{display:block;width:100%;height:auto;max-height:760px;object-fit:contain;border-radius:21px}
 .slider-arrow{position:absolute;z-index:5;width:52px;height:52px;border:0;border-radius:50%;background:#087f45;color:#fff;font-size:44px;line-height:42px;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 22px rgba(0,0,0,.08)}
 .arrow-left{left:0}
 .arrow-right{right:0}
-
-/* Green waves at the bottom of the first viewport */
-.hero-wave{position:absolute;left:-5%;width:110%;bottom:-2px;pointer-events:none}
-.wave-one{height:105px;background:#9bca63;clip-path:ellipse(72% 65% at 50% 100%)}
-.wave-two{height:82px;background:#075d36;bottom:-34px;clip-path:ellipse(72% 65% at 50% 100%)}
-
-/* Why Sante */
-.why-section{position:relative;padding:105px 0 120px;background:#fff}
-.section-heading{text-align:center;max-width:760px;margin:0 auto 55px}
-.section-eyebrow{color:var(--green);font-weight:900;font-size:15px;letter-spacing:1.8px;margin-bottom:14px}
-.section-heading h2{font-size:clamp(42px,5vw,68px);line-height:1;letter-spacing:-3px;color:#093d29;margin:0 0 22px;font-weight:950}
-.section-heading h2 span{color:var(--green)}
-.section-heading p{margin:0 auto;color:var(--muted);font-size:19px;line-height:1.65;max-width:650px}
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1180px;margin:0 auto}
-.why-card{position:relative;padding:34px;border:1px solid #dce9e1;border-radius:28px;background:#fbfefc;min-height:275px;box-shadow:0 14px 35px rgba(7,75,47,.05)}
-.why-card.featured{background:#eaf7e0;border-color:#d6e9c8;transform:translateY(-10px)}
-.why-number{position:absolute;right:25px;top:22px;color:#a9c9b7;font-size:14px;font-weight:900;letter-spacing:1px}
-.why-icon{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#dff0d0;color:var(--green-dark);font-size:29px;font-weight:900;margin-bottom:28px}
-.why-card h3{margin:0 0 12px;color:#123d29;font-size:23px;letter-spacing:-.5px}
-.why-card p{margin:0;color:#59645f;font-size:16px;line-height:1.6}
-
 .anchor-section{height:1px}
-
 @media(max-width:1180px){
   .wrap{padding:0 30px}
   .navlinks{gap:20px;font-size:14px}
@@ -87,7 +56,6 @@ button{font:inherit}
   .benefits{gap:18px}
   .benefit{min-width:0}
 }
-
 @media(max-width:900px){
   .navin{min-height:76px}
   .navlinks{display:none}
@@ -103,10 +71,7 @@ button{font:inherit}
   .benefits{justify-content:center;flex-wrap:wrap;text-align:left;margin-top:40px}
   .product-stage{padding:0 38px}
   .product-frame{width:min(100%,540px)}
-  .why-grid{grid-template-columns:1fr;max-width:560px}
-  .why-card.featured{transform:none}
 }
-
 @media(max-width:600px){
   .wrap{padding:0 16px}
   .brandmark{width:38px;height:38px}
@@ -121,11 +86,4 @@ button{font:inherit}
   .product-frame{border-width:6px;border-radius:23px;padding:6px}
   .product-frame img{border-radius:16px}
   .slider-arrow{width:40px;height:40px;font-size:34px}
-  .wave-one{height:75px}
-  .wave-two{height:60px;bottom:-26px}
-  .why-section{padding:75px 0 85px}
-  .section-heading{margin-bottom:38px}
-  .section-heading h2{letter-spacing:-2px}
-  .section-heading p{font-size:17px}
-  .why-card{padding:28px;min-height:245px}
 }
