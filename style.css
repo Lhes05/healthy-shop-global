@@ -29,9 +29,9 @@ button{font:inherit}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(500px,.98fr);gap:45px;align-items:center;position:relative;z-index:3}
 .hero-copy{padding:20px 0 50px}
 .eyebrow{color:var(--green);font-size:21px;letter-spacing:.1px;font-weight:900;margin-bottom:28px}
-.hero h1{font-size:clamp(52px,5.2vw,80px);line-height:.98;letter-spacing:-4px;margin:0 0 30px;font-weight:950;max-width:760px}
-.headline-black{color:#111111}
-.headline-green{color:var(--green)}
+.hero h1{font-size:clamp(52px,5.2vw,80px);line-height:.98;letter-spacing:-4px;margin:0 0 30px;font-weight:950;max-width:760px;color:#111111}
+.hero h1 .headline-black{color:#111111}
+.hero h1 .headline-green{color:var(--green)}
 .hero-lead{font-size:24px;line-height:1.55;color:#454f4a;max-width:680px;margin:0 0 30px}
 .hero-shop{padding:17px 31px;font-size:18px;min-width:210px;background:var(--green);color:#fff;border-radius:999px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 12px 26px rgba(8,127,69,.12)}
 .product-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:0 32px}
