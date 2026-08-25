@@ -35,11 +35,6 @@ button{font:inherit}
 .hero h1 span{color:#0a432d}
 .hero-lead{font-size:24px;line-height:1.55;color:#454f4a;max-width:680px;margin:0 0 30px}
 .hero-shop{padding:17px 31px;font-size:18px;min-width:210px;box-shadow:0 12px 26px rgba(8,127,69,.12)}
-.benefits{display:flex;gap:34px;margin-top:55px;align-items:flex-start}
-.benefit{display:flex;gap:14px;align-items:flex-start;min-width:170px}
-.benefit-icon{width:58px;height:58px;flex:0 0 58px;border-radius:50%;background:#e2f2cf;color:var(--green-dark);display:grid;place-items:center;font-size:32px;font-weight:800}
-.benefit strong{display:block;color:#163b2a;font-size:16px;margin:5px 0 7px}
-.benefit span{display:block;color:#4e5853;font-size:15px;line-height:1.45}
 .product-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:0 32px}
 .product-frame{width:min(100%,560px);border:9px solid #084d31;border-radius:31px;background:#fff;padding:9px;box-shadow:0 24px 50px rgba(7,75,47,.12);display:flex;align-items:center;justify-content:center}
 .product-frame img{display:block;width:100%;height:auto;max-height:760px;object-fit:contain;border-radius:21px}
@@ -53,8 +48,6 @@ button{font:inherit}
   .brand{min-width:190px}
   .nav-actions{min-width:230px}
   .hero-grid{grid-template-columns:1fr .9fr;gap:20px}
-  .benefits{gap:18px}
-  .benefit{min-width:0}
 }
 @media(max-width:900px){
   .navin{min-height:76px}
@@ -68,7 +61,6 @@ button{font:inherit}
   .hero h1{font-size:clamp(48px,10vw,74px);letter-spacing:-3px;max-width:none}
   .hero-lead{font-size:19px;margin-left:auto;margin-right:auto}
   .hero-shop{margin:auto}
-  .benefits{justify-content:center;flex-wrap:wrap;text-align:left;margin-top:40px}
   .product-stage{padding:0 38px}
   .product-frame{width:min(100%,540px)}
 }
@@ -81,7 +73,6 @@ button{font:inherit}
   .hero{padding:42px 0 95px}
   .hero h1{font-size:44px;letter-spacing:-2.2px}
   .hero-lead{font-size:17px}
-  .benefits{display:grid;grid-template-columns:1fr;max-width:280px;margin-left:auto;margin-right:auto}
   .product-stage{padding:0 21px}
   .product-frame{border-width:6px;border-radius:23px;padding:6px}
   .product-frame img{border-radius:16px}
