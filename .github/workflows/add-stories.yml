@@ -1,0 +1,36 @@
+name: Add Santé Stories section
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  add-stories:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add Stories section without overwriting page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'stories-community-section' in s:
+              raise SystemExit(0)
+          css = '''\n    .stories-community-section{background:#fff;padding:72px 0 84px;scroll-margin-top:76px}.stories-community-heading{max-width:620px;margin:0 0 28px}.stories-community-heading h2{margin:0 0 10px;font-size:clamp(42px,4.4vw,60px);line-height:1.02;letter-spacing:-3px;font-weight:950;color:#111}.stories-community-heading p{margin:0;color:#52605a;font-size:13px;line-height:1.5}.stories-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.story-card{position:relative;min-width:0;border:1px solid #d7e5dc;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(7,75,47,.08);cursor:pointer;padding:0;text-align:left}.story-card img{display:block;width:100%;aspect-ratio:1.15/1;object-fit:cover;object-position:center}.story-card::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.05) 55%,transparent 75%);pointer-events:none}.story-play{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.96);display:flex;align-items:center;justify-content:center;color:#087f45;font-size:26px;padding-left:4px;box-shadow:0 8px 22px rgba(0,0,0,.18)}.story-meta{position:absolute;z-index:2;left:16px;right:16px;bottom:14px;color:#fff}.story-kicker{display:block;font-size:8px;letter-spacing:1.2px;font-weight:950;margin-bottom:5px}.story-title{display:block;font-size:15px;font-weight:950;line-height:1.1}.stories-modal{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.78)}.stories-modal.is-open{display:flex}.stories-dialog{position:relative;width:min(920px,100%);background:#0b120e;border-radius:18px;padding:10px;box-shadow:0 25px 80px rgba(0,0,0,.4)}.stories-dialog video{display:block;width:100%;max-height:78vh;background:#000;border-radius:12px}.stories-close{position:absolute;z-index:3;right:-12px;top:-12px;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#123;font-size:25px;line-height:1;cursor:pointer;box-shadow:0 5px 18px rgba(0,0,0,.22)}body.stories-modal-open{overflow:hidden}\n    @media(max-width:900px){.stories-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stories-community-section{padding:58px 0 68px}}\n    @media(max-width:600px){.stories-grid{grid-template-columns:1fr;gap:12px}.stories-community-heading h2{font-size:40px;letter-spacing:-2px}.story-card img{aspect-ratio:1.2/1}.story-play{width:56px;height:56px}.stories-dialog{padding:7px}.stories-close{right:-5px;top:-5px;width:36px;height:36px;font-size:22px}}\n'''
+          s = s.replace('</style>', css + '  </style>', 1)
+          section = '''\n    <section id="stories-community" class="stories-community-section"><div class="wrap"><div class="stories-community-heading"><h2>Stories from the Santé community.</h2><p>Click any story to watch the video.</p></div><div class="stories-grid">''' + ''.join(f'''<button class="story-card" type="button" data-story="{i}"><img src="assets/images/story-0{i}.jpg" alt="Santé Story {i}"><span class="story-play" aria-hidden="true">▶</span><span class="story-meta"><span class="story-kicker">VIDEO STORY</span><span class="story-title">Santé Story 0{i}</span></span></button>''' for i in range(1,6)) + '''</div></div></section>\n    <div class="stories-modal" id="storiesModal" role="dialog" aria-modal="true" aria-label="Santé community story video"><div class="stories-dialog"><button type="button" class="stories-close" id="storiesClose" aria-label="Close video">×</button><video id="storiesVideo" controls playsinline preload="metadata"></video></div></div>\n'''
+          marker = '    <section id="business" class="anchor-section"></section>'
+          s = s.replace(marker, section + marker, 1)
+          script = '''\n    (function(){const modal=document.getElementById('storiesModal'),video=document.getElementById('storiesVideo'),close=document.getElementById('storiesClose');const cards=[...document.querySelectorAll('.story-card')];function openStory(n){video.src=`assets/videos/story-0${n}.mp4`;modal.classList.add('is-open');document.body.classList.add('stories-modal-open');video.play().catch(()=>{});}function closeStory(){video.pause();video.removeAttribute('src');video.load();modal.classList.remove('is-open');document.body.classList.remove('stories-modal-open')}cards.forEach(card=>card.addEventListener('click',()=>openStory(card.dataset.story)));close.addEventListener('click',closeStory);modal.addEventListener('click',e=>{if(e.target===modal)closeStory()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('is-open'))closeStory()})})();\n'''
+          s = s.replace('  </script>', script + '  </script>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit Stories section
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Add Santé community stories section'
+          git push
