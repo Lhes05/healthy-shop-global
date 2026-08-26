@@ -19,10 +19,13 @@ jobs:
           if 'data-story="6"' in s:
               raise SystemExit(0)
           card = '''<button class="story-card" type="button" data-story="6"><img src="assets/images/hsg-poster-06.jpg" alt="Santé Story 06"><span class="story-play" aria-hidden="true">▶</span><span class="story-meta"><span class="story-kicker">VIDEO STORY</span><span class="story-title">Santé Story 06</span></span></button>'''
-          marker = '</div></div></section>\n    <div class="stories-modal"'
-          if marker not in s:
-              raise SystemExit('Stories section marker not found')
-          s = s.replace(marker, card + marker, 1)
+          grid_start = s.find('<div class="stories-grid">')
+          if grid_start < 0:
+              raise SystemExit('Stories grid not found')
+          grid_end = s.find('</div></div></section>', grid_start)
+          if grid_end < 0:
+              raise SystemExit('Stories grid closing marker not found')
+          s = s[:grid_end] + card + s[grid_end:]
           p.write_text(s, encoding='utf-8')
           PY
       - name: Commit Story 06
