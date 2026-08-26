@@ -10,28 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Add Story 06 without replacing the page
+      - name: Use the Story 06 image already in assets
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          if 'data-story="6"' in s:
+          old = 'assets/images/hsg-poster-06.jpg'
+          new = 'assets/images/story-06.png'
+          if old in s:
+              s = s.replace(old, new)
+          elif new in s:
               raise SystemExit(0)
-          card = '''<button class="story-card" type="button" data-story="6"><img src="assets/images/hsg-poster-06.jpg" alt="Santé Story 06"><span class="story-play" aria-hidden="true">▶</span><span class="story-meta"><span class="story-kicker">VIDEO STORY</span><span class="story-title">Santé Story 06</span></span></button>'''
-          grid_start = s.find('<div class="stories-grid">')
-          if grid_start < 0:
-              raise SystemExit('Stories grid not found')
-          grid_end = s.find('</div></div></section>', grid_start)
-          if grid_end < 0:
-              raise SystemExit('Stories grid closing marker not found')
-          s = s[:grid_end] + card + s[grid_end:]
+          else:
+              raise SystemExit('Story 06 image reference not found')
           p.write_text(s, encoding='utf-8')
           PY
-      - name: Commit Story 06
+      - name: Commit Story 06 image change
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
-          git diff --cached --quiet || git commit -m 'Add Santé Story 06 card'
+          git diff --cached --quiet || git commit -m 'Use new Story 06 image'
           git push
