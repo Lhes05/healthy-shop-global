@@ -1,0 +1,34 @@
+name: Add Santé Story 06
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  add-story-06:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add Story 06 without replacing the page
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'data-story="6"' in s:
+              raise SystemExit(0)
+          card = '''<button class="story-card" type="button" data-story="6"><img src="assets/images/hsg-poster-06.jpg" alt="Santé Story 06"><span class="story-play" aria-hidden="true">▶</span><span class="story-meta"><span class="story-kicker">VIDEO STORY</span><span class="story-title">Santé Story 06</span></span></button>'''
+          marker = '</div></div></section>\n    <div class="stories-modal"'
+          if marker not in s:
+              raise SystemExit('Stories section marker not found')
+          s = s.replace(marker, card + marker, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit Story 06
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Add Santé Story 06 card'
+          git push
