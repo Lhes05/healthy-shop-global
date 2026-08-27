@@ -1,0 +1,51 @@
+name: Add Three Simple Steps
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  add-three-steps:
+    if: ${{ !contains(github.event.head_commit.message, 'Three simple steps section') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Insert Three Simple Steps
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'id="three-simple-steps"' in s:
+              raise SystemExit(0)
+          marker = '    <section id="stories" class="stories-section">'
+          section = '''    <section id="three-simple-steps" class="three-simple-steps-section"><div class="wrap"><div class="three-simple-steps-heading"><h2>Three simple steps.</h2></div><div class="three-simple-steps-grid"><article class="three-simple-step-card"><span>STEP 01</span><h3>Explore</h3><p>Browse the products and learn which category fits your routine.</p></article><article class="three-simple-step-card"><span>STEP 02</span><h3>Connect</h3><p>Use <strong>Chat with us</strong> for ordering, discounts, distributor questions or direct help.</p></article><article class="three-simple-step-card"><span>STEP 03</span><h3>Start</h3><p>Choose your next step and continue through the appropriate link.</p></article></div></div></section>\n'''
+          if marker not in s:
+              raise SystemExit('Stories section marker not found')
+          s = s.replace(marker, section + marker, 1)
+          p.write_text(s, encoding='utf-8')
+
+      - name: Add styles
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('style.css')
+          s = p.read_text(encoding='utf-8')
+          if '.three-simple-steps-section' in s:
+              raise SystemExit(0)
+          css = '''\n.three-simple-steps-section{background:#fff;color:#102018;padding:78px 0 86px;scroll-margin-top:76px}.three-simple-steps-heading{margin:0 0 28px}.three-simple-steps-heading h2{margin:0;font-size:clamp(40px,4.6vw,58px);line-height:1.02;letter-spacing:-3px;font-weight:950;color:#102018}.three-simple-steps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.three-simple-step-card{min-height:206px;border:1px solid #d7e5dc;border-radius:18px;background:#fff;padding:26px 22px;box-shadow:0 10px 24px rgba(7,75,47,.04)}.three-simple-step-card span{display:block;color:#087f45;font-size:10px;letter-spacing:1.5px;font-weight:950;margin-bottom:24px}.three-simple-step-card h3{margin:0 0 22px;font-size:19px;line-height:1.15;font-weight:900;color:#102018}.three-simple-step-card p{margin:0;color:#52605a;font-size:14px;line-height:1.7}.three-simple-step-card strong{color:#102018}.three-simple-step-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(7,75,47,.08);transition:transform .18s ease,box-shadow .18s ease}@media(max-width:900px){.three-simple-steps-section{padding:60px 0 68px}.three-simple-steps-grid{grid-template-columns:1fr;gap:12px}.three-simple-step-card{min-height:0}}@media(max-width:600px){.three-simple-steps-section{padding:52px 0 62px}.three-simple-steps-heading h2{font-size:40px;letter-spacing:-2px}.three-simple-step-card{padding:22px 18px}}\n'''
+          p.write_text(s + css, encoding='utf-8')
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html style.css
+          git diff --cached --quiet && exit 0
+          git commit -m "Add Three simple steps section"
+          git push
