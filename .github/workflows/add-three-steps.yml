@@ -15,6 +15,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Add Chat Help Menu
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'id="helpChatWidget"' in s:
+              raise SystemExit(0)
+          style = '''\n    .help-chat-widget{position:fixed;right:24px;bottom:22px;z-index:950;font-family:inherit}.help-chat-panel{width:288px;background:#fff;border:1px solid #d7e5dc;border-radius:22px;padding:12px;box-shadow:0 24px 55px rgba(7,75,47,.18);margin-bottom:10px;display:none}.help-chat-panel.is-open{display:block}.help-chat-title{padding:8px 9px 12px;font-size:17px;font-weight:950;color:#102018}.help-chat-options{display:grid;gap:7px}.help-chat-option{width:100%;border:0;border-radius:12px;background:#f1f8f3;color:#102018;text-align:left;padding:11px 13px;font:inherit;font-size:13px;font-weight:850;cursor:pointer;transition:background .15s ease,transform .15s ease}.help-chat-option:hover{background:#e5f3e9;transform:translateY(-1px)}.help-chat-toggle{margin-left:auto;border:0;border-radius:999px;background:#087f45;color:#fff;min-height:46px;padding:0 20px;font:inherit;font-size:13px;font-weight:950;box-shadow:0 12px 28px rgba(8,127,69,.24);cursor:pointer}.help-chat-toggle:hover{background:#066b3b}.help-chat-toggle:focus-visible,.help-chat-option:focus-visible{outline:3px solid rgba(8,127,69,.25);outline-offset:2px}\n    @media(max-width:600px){.help-chat-widget{right:14px;bottom:14px}.help-chat-panel{width:min(288px,calc(100vw - 28px));border-radius:19px}.help-chat-toggle{min-height:44px;padding:0 17px}}\n'''
+          s = s.replace('  </style>\n</head>', style + '  </style>\n</head>', 1)
+          widget = '''\n  <div class="help-chat-widget" id="helpChatWidget">\n    <div class="help-chat-panel" id="helpChatPanel" aria-hidden="true">\n      <div class="help-chat-title">How can we help?</div>\n      <div class="help-chat-options">\n        <button type="button" class="help-chat-option" data-target="products">🛒 How to order</button>\n        <button type="button" class="help-chat-option" data-target="inquiry" data-message="I’d like to know how to become a distributor.">🚀 How to become Distributor</button>\n        <button type="button" class="help-chat-option" data-target="discount">🏷️ How to get discounts</button>\n        <button type="button" class="help-chat-option" data-target="inquiry" data-message="Hi Leslie, I’d like to talk with you.">💬 Talk to Leslie</button>\n      </div>\n    </div>\n    <button type="button" class="help-chat-toggle" id="helpChatToggle" aria-expanded="false" aria-controls="helpChatPanel">💬 Chat with us</button>\n  </div>\n'''
+          script = '''\n  <script>\n    (function(){\n      const toggle=document.getElementById('helpChatToggle');\n      const panel=document.getElementById('helpChatPanel');\n      const widget=document.getElementById('helpChatWidget');\n      if(!toggle||!panel||!widget)return;\n      function close(){panel.classList.remove('is-open');panel.setAttribute('aria-hidden','true');toggle.setAttribute('aria-expanded','false');}\n      toggle.addEventListener('click',()=>{const open=!panel.classList.contains('is-open');panel.classList.toggle('is-open',open);panel.setAttribute('aria-hidden',String(!open));toggle.setAttribute('aria-expanded',String(open));});\n      panel.querySelectorAll('.help-chat-option').forEach(btn=>btn.addEventListener('click',()=>{\n        const target=document.getElementById(btn.dataset.target);\n        if(target)target.scrollIntoView({behavior:'smooth',block:'start'});\n        const message=btn.dataset.message;\n        if(message){const field=document.getElementById('inquiryMessage');if(field){field.value=message;field.focus();}}\n        close();\n      }));\n      document.addEventListener('click',e=>{if(!widget.contains(e.target))close();});\n      document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});\n    })();\n  </script>\n'''
+          s = s.replace('</body>', widget + script + '</body>', 1)
+          p.write_text(s, encoding='utf-8')
+
       - name: Insert Three Simple Steps
         shell: python
         run: |
@@ -47,5 +62,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html style.css
           git diff --cached --quiet && exit 0
-          git commit -m "Add Three simple steps section"
+          git commit -m "Add Chat Help Menu"
           git push
