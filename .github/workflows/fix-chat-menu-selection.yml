@@ -1,0 +1,38 @@
+name: Fix Chat Menu Selection
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-chat-menu:
+    if: ${{ github.event.head_commit.message != 'Fix Chat Menu Selection' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add selection behavior override
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* CHAT MENU SELECTION FIX */'
+          if marker in s:
+              raise SystemExit(0)
+          script = '''\n  <script>\n    /* CHAT MENU SELECTION FIX */\n    (function(){\n      const panel=document.getElementById('helpChatPanel');\n      const options=document.querySelector('#helpChatPanel .help-chat-options');\n      const details=document.getElementById('helpOrderDetails');\n      const order=document.querySelector('#helpChatPanel .help-chat-option[data-target="products"]');\n      if(!panel||!options)return;\n\n      function showOrder(){\n        options.style.display='grid';\n        if(details){details.classList.add('is-open');details.setAttribute('aria-hidden','false');}\n      }\n      function closeOrder(){\n        if(details){details.classList.remove('is-open');details.setAttribute('aria-hidden','true');}\n      }\n\n      panel.addEventListener('click',function(e){\n        const btn=e.target.closest('.help-chat-option');\n        if(!btn || !panel.contains(btn)) return;\n        e.preventDefault();\n        e.stopPropagation();\n        e.stopImmediatePropagation();\n\n        const target=btn.dataset.target;\n        if(target==='products'){\n          showOrder();\n          return;\n        }\n\n        // Selecting another option closes the currently open order details,\n        // but keeps the main four choices visible and clickable.\n        closeOrder();\n        const section=document.getElementById(target);\n        if(section) section.scrollIntoView({behavior:'smooth',block:'start'});\n        const message=btn.dataset.message;\n        if(message){\n          const field=document.getElementById('inquiryMessage');\n          if(field){field.value=message;}\n        }\n      },true);\n\n      if(order) order.setAttribute('aria-expanded','false');\n    })();\n  </script>\n'''
+          s = s.replace('</body>', script + '</body>', 1)
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix Chat Menu Selection"
+          git push
