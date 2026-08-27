@@ -1,0 +1,34 @@
+name: Reset Chat Menu State
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  reset-chat-state:
+    if: ${{ github.event.head_commit.message != 'Reset Chat Menu State' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add reset behavior
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* CHAT MENU RESET STATE */'
+          if marker not in s:
+              script = '''\n  <script>\n    /* CHAT MENU RESET STATE */\n    (function(){\n      const toggle=document.getElementById('helpChatToggle');\n      const options=document.querySelector('#helpChatPanel .help-chat-options');\n      const details=document.getElementById('helpOrderDetails');\n      if(!toggle||!options)return;\n      function resetMenu(){\n        options.style.display='grid';\n        if(details){\n          details.classList.remove('is-open');\n          details.setAttribute('aria-hidden','true');\n        }\n      }\n      toggle.addEventListener('click',function(){\n        if(toggle.getAttribute('aria-expanded') === 'true'){\n          resetMenu();\n        }\n      });\n      document.addEventListener('keydown',function(e){\n        if(e.key==='Escape') resetMenu();\n      });\n    })();\n  </script>\n'''
+              s=s.replace('</body>',script+'</body>',1)
+              p.write_text(s,encoding='utf-8')
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Reset Chat Menu State"
+          git push
