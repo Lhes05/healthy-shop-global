@@ -91,6 +91,41 @@
       chatBox.setAttribute('aria-hidden', 'false');
     }
 
+    // Capture Talk to Leslie before the existing panel-level menu handler.
+    // The older menu handler uses stopImmediatePropagation on the panel,
+    // so document-capture must get the click first.
+    if (!window.__leslieTalkCaptureInstalled) {
+      window.__leslieTalkCaptureInstalled = true;
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest && e.target.closest('.help-chat-option');
+        if (!btn) return;
+        if (!btn.closest('#helpChatPanel')) return;
+        if (!(btn.textContent || '').toLowerCase().includes('talk to leslie')) return;
+        const currentPanel = document.getElementById('helpChatPanel');
+        if (!currentPanel || !currentPanel.dataset.leslieEnhanced) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        const currentOptions = currentPanel.querySelector('.help-chat-options');
+        const currentSubmenu = currentPanel.querySelector('.leslie-submenu');
+        const currentChat = currentPanel.querySelector('.leslie-chat-box');
+        if (currentOptions) currentOptions.style.display = 'none';
+        if (currentSubmenu) {
+          currentSubmenu.classList.add('is-open');
+          currentSubmenu.setAttribute('aria-hidden', 'false');
+        }
+        if (currentChat) {
+          currentChat.classList.remove('is-open');
+          currentChat.setAttribute('aria-hidden', 'true');
+        }
+        const orderDetails = document.getElementById('helpOrderDetails');
+        if (orderDetails) {
+          orderDetails.classList.remove('is-open');
+          orderDetails.setAttribute('aria-hidden', 'true');
+        }
+      }, true);
+    }
+
     leslieButton.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
