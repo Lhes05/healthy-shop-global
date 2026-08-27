@@ -30,6 +30,25 @@ jobs:
           s = s.replace('</body>', widget + script + '</body>', 1)
           p.write_text(s, encoding='utf-8')
 
+      - name: Add How To Order Details
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'id="helpOrderDetails"' in s:
+              raise SystemExit(0)
+          css = '''\n    .help-order-details{display:none;padding:2px 0 0}.help-order-details.is-open{display:block}.help-order-back{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#087f45;font:inherit;font-size:12px;font-weight:900;padding:5px 7px 10px;cursor:pointer}.help-order-step{border:1px solid #dbe8df;border-radius:12px;background:#fff;padding:11px 10px;margin-bottom:7px}.help-order-step strong{display:block;color:#102018;font-size:12px;font-weight:950;margin-bottom:5px}.help-order-step span{display:block;color:#52605a;font-size:10px;line-height:1.45}.help-order-shop{display:flex;align-items:center;justify-content:center;width:100%;min-height:40px;margin-top:8px;border-radius:10px;background:#087f45;color:#fff;text-decoration:none;font-size:12px;font-weight:950;box-shadow:0 8px 18px rgba(8,127,69,.16)}\n'''
+          s = s.replace('  </style>\n</head>', css + '  </style>\n</head>', 1)
+          details = '''\n      <div class="help-order-details" id="helpOrderDetails" aria-hidden="true">\n        <button type="button" class="help-order-back" id="helpOrderBack">← How can we help?</button>\n        <div class="help-order-step"><strong>01 — Choose Your Product</strong><span>Browse our Santé wellness products and choose what fits your needs.</span></div>\n        <div class="help-order-step"><strong>02 — Confirm Your Order</strong><span>We’ll assist you with your order details, payment, and delivery.</span></div>\n        <div class="help-order-step"><strong>03 — Get Your Barley Products 📦</strong><span>Sit back and wait for your order to arrive.</span></div>\n        <a class="help-order-shop" href="https://partner.mysante.com/shop/premium" target="_blank" rel="noopener noreferrer">📚 Click here to shop →</a>\n      </div>\n'''
+          marker = '      <div class="help-chat-options">'
+          if marker not in s:
+              raise SystemExit('Help options marker not found')
+          s = s.replace(marker, details + marker, 1)
+          script = '''\n  <script>\n    (function(){\n      const panel=document.getElementById('helpChatPanel');\n      const options=document.querySelector('#helpChatPanel .help-chat-options');\n      const details=document.getElementById('helpOrderDetails');\n      const order=document.querySelector('#helpChatPanel .help-chat-option[data-target="products"]');\n      const back=document.getElementById('helpOrderBack');\n      if(!panel||!options||!details||!order||!back)return;\n      const cleanOrder=order.cloneNode(true);\n      order.replaceWith(cleanOrder);\n      function showOrder(){options.style.display='none';details.classList.add('is-open');details.setAttribute('aria-hidden','false');}\n      function showMenu(){options.style.display='grid';details.classList.remove('is-open');details.setAttribute('aria-hidden','true');}\n      cleanOrder.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();showOrder();});\n      back.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();showMenu();});\n    })();\n  </script>\n'''
+          s = s.replace('</body>', script + '</body>', 1)
+          p.write_text(s, encoding='utf-8')
+
       - name: Insert Three Simple Steps
         shell: python
         run: |
