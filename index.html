@@ -25,6 +25,8 @@
 
     .help-chat-widget{position:fixed;right:24px;bottom:22px;z-index:950;font-family:inherit}.help-chat-panel{width:288px;background:#fff;border:1px solid #d7e5dc;border-radius:22px;padding:12px;box-shadow:0 24px 55px rgba(7,75,47,.18);margin-bottom:10px;display:none}.help-chat-panel.is-open{display:block}.help-chat-title{padding:8px 9px 12px;font-size:17px;font-weight:950;color:#102018}.help-chat-options{display:grid;gap:7px}.help-chat-option{width:100%;border:0;border-radius:12px;background:#f1f8f3;color:#102018;text-align:left;padding:11px 13px;font:inherit;font-size:13px;font-weight:850;cursor:pointer;transition:background .15s ease,transform .15s ease}.help-chat-option:hover{background:#e5f3e9;transform:translateY(-1px)}.help-chat-toggle{margin-left:auto;border:0;border-radius:999px;background:#087f45;color:#fff;min-height:46px;padding:0 20px;font:inherit;font-size:13px;font-weight:950;box-shadow:0 12px 28px rgba(8,127,69,.24);cursor:pointer}.help-chat-toggle:hover{background:#066b3b}.help-chat-toggle:focus-visible,.help-chat-option:focus-visible{outline:3px solid rgba(8,127,69,.25);outline-offset:2px}
     @media(max-width:600px){.help-chat-widget{right:14px;bottom:14px}.help-chat-panel{width:min(288px,calc(100vw - 28px));border-radius:19px}.help-chat-toggle{min-height:44px;padding:0 17px}}
+
+    .help-order-details{display:none;padding:2px 0 0}.help-order-details.is-open{display:block}.help-order-back{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#087f45;font:inherit;font-size:12px;font-weight:900;padding:5px 7px 10px;cursor:pointer}.help-order-step{border:1px solid #dbe8df;border-radius:12px;background:#fff;padding:11px 10px;margin-bottom:7px}.help-order-step strong{display:block;color:#102018;font-size:12px;font-weight:950;margin-bottom:5px}.help-order-step span{display:block;color:#52605a;font-size:10px;line-height:1.45}.help-order-shop{display:flex;align-items:center;justify-content:center;width:100%;min-height:40px;margin-top:8px;border-radius:10px;background:#087f45;color:#fff;text-decoration:none;font-size:12px;font-weight:950;box-shadow:0 8px 18px rgba(8,127,69,.16)}
   </style>
 </head>
 <body>
@@ -84,6 +86,14 @@
   <div class="help-chat-widget" id="helpChatWidget">
     <div class="help-chat-panel" id="helpChatPanel" aria-hidden="true">
       <div class="help-chat-title">How can we help?</div>
+
+      <div class="help-order-details" id="helpOrderDetails" aria-hidden="true">
+        <button type="button" class="help-order-back" id="helpOrderBack">← How can we help?</button>
+        <div class="help-order-step"><strong>01 — Choose Your Product</strong><span>Browse our Santé wellness products and choose what fits your needs.</span></div>
+        <div class="help-order-step"><strong>02 — Confirm Your Order</strong><span>We’ll assist you with your order details, payment, and delivery.</span></div>
+        <div class="help-order-step"><strong>03 — Get Your Barley Products 📦</strong><span>Sit back and wait for your order to arrive.</span></div>
+        <a class="help-order-shop" href="https://partner.mysante.com/shop/premium" target="_blank" rel="noopener noreferrer">📚 Click here to shop →</a>
+      </div>
       <div class="help-chat-options">
         <button type="button" class="help-chat-option" data-target="products">🛒 How to order</button>
         <button type="button" class="help-chat-option" data-target="inquiry" data-message="I’d like to know how to become a distributor.">🚀 How to become Distributor</button>
@@ -111,6 +121,23 @@
       }));
       document.addEventListener('click',e=>{if(!widget.contains(e.target))close();});
       document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+    })();
+  </script>
+
+  <script>
+    (function(){
+      const panel=document.getElementById('helpChatPanel');
+      const options=document.querySelector('#helpChatPanel .help-chat-options');
+      const details=document.getElementById('helpOrderDetails');
+      const order=document.querySelector('#helpChatPanel .help-chat-option[data-target="products"]');
+      const back=document.getElementById('helpOrderBack');
+      if(!panel||!options||!details||!order||!back)return;
+      const cleanOrder=order.cloneNode(true);
+      order.replaceWith(cleanOrder);
+      function showOrder(){options.style.display='none';details.classList.add('is-open');details.setAttribute('aria-hidden','false');}
+      function showMenu(){options.style.display='grid';details.classList.remove('is-open');details.setAttribute('aria-hidden','true');}
+      cleanOrder.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();showOrder();});
+      back.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();showMenu();});
     })();
   </script>
 </body>
