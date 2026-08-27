@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   add-three-steps:
-    if: ${{ !contains(github.event.head_commit.message, 'Three simple steps section') }}
+    if: ${{ github.event.head_commit.message != 'Add Three simple steps section' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
