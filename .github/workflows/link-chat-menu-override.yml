@@ -1,0 +1,36 @@
+name: Link Chat Menu Override
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  link-chat-menu-override:
+    if: ${{ github.event.head_commit.message != 'Link Chat Menu Override' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add override script link
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          link = '<script src="chat-menu-keep-options.js?v=1"></script>'
+          if link not in s:
+              s = s.replace('</body>', f'  {link}\n</body>', 1)
+              p.write_text(s, encoding='utf-8')
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Link Chat Menu Override"
+          git push
