@@ -14,8 +14,10 @@
 .barley-feature-cta{min-height:54px;padding:0 28px;border-radius:12px;font-size:14px;font-weight:950}
 @media(max-width:600px){.product-bottom a{min-width:76px;height:40px;padding:0 16px;font-size:13px}.testimony-button{height:52px;min-height:52px;font-size:13px}.barley-feature-cta{min-height:52px;padding:0 24px;font-size:13px}}
 
-/* Restored promotional block: visual-only so the existing HTML layout stays intact. */
-.stories-section{position:relative;padding-top:124px}
-.stories-section::before{content:"45–50% BIG DISCOUNT";position:absolute;top:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;width:min(720px,calc(100% - 32px));min-height:58px;padding:10px 24px;border-radius:16px;background:linear-gradient(135deg,#063d25 0%,#087f45 100%);color:#fff;font-size:clamp(22px,3vw,34px);font-weight:950;letter-spacing:-1px;text-align:center;box-shadow:0 14px 30px rgba(7,75,47,.16)}
-.stories-heading h2{font-size:0}.stories-heading h2::after{content:"Stories from the Santé community.";font-size:clamp(42px,4.7vw,62px);line-height:1.02;letter-spacing:-3.2px;font-weight:950;color:#102018}
-@media(max-width:600px){.stories-section{padding-top:112px}.stories-section::before{top:24px;min-height:52px;font-size:21px;padding:9px 16px}.stories-heading h2::after{font-size:40px;letter-spacing:-2px}}
+/* Keep the completed discount and stories sections in normal document flow. */
+.discount-section{position:relative!important;z-index:1!important;display:block!important;clear:both!important;transform:none!important;}
+.stories-section{position:relative!important;z-index:1!important;display:block!important;clear:both!important;padding-top:78px!important;transform:none!important;}
+.stories-section::before{display:none!important;content:none!important;}
+.stories-heading h2{font-size:clamp(42px,5vw,64px)!important;line-height:1.02!important;letter-spacing:-3.4px!important;}
+.stories-heading h2::after{content:none!important;display:none!important;}
+@media(max-width:600px){.stories-section{padding-top:52px!important}.stories-heading h2{font-size:40px!important;letter-spacing:-2.2px!important;}}
