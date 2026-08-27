@@ -1,7 +1,8 @@
-/* Story play-button positioning override — add-only. */
+/* Story play-button positioning */
 .stories-grid .story-card .story-play {
   transform: translateY(105px) !important;
 }
+
 @media (max-width: 600px) {
   .stories-grid .story-card .story-play {
     transform: translateY(88px) !important;
