@@ -141,5 +141,51 @@
     })();
   </script>
   <script src="chat-menu-keep-options.js?v=1"></script>
+
+  <script>
+    /* CHAT MENU SELECTION FIX */
+    (function(){
+      const panel=document.getElementById('helpChatPanel');
+      const options=document.querySelector('#helpChatPanel .help-chat-options');
+      const details=document.getElementById('helpOrderDetails');
+      const order=document.querySelector('#helpChatPanel .help-chat-option[data-target="products"]');
+      if(!panel||!options)return;
+
+      function showOrder(){
+        options.style.display='grid';
+        if(details){details.classList.add('is-open');details.setAttribute('aria-hidden','false');}
+      }
+      function closeOrder(){
+        if(details){details.classList.remove('is-open');details.setAttribute('aria-hidden','true');}
+      }
+
+      panel.addEventListener('click',function(e){
+        const btn=e.target.closest('.help-chat-option');
+        if(!btn || !panel.contains(btn)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        const target=btn.dataset.target;
+        if(target==='products'){
+          showOrder();
+          return;
+        }
+
+        // Selecting another option closes the currently open order details,
+        // but keeps the main four choices visible and clickable.
+        closeOrder();
+        const section=document.getElementById(target);
+        if(section) section.scrollIntoView({behavior:'smooth',block:'start'});
+        const message=btn.dataset.message;
+        if(message){
+          const field=document.getElementById('inquiryMessage');
+          if(field){field.value=message;}
+        }
+      },true);
+
+      if(order) order.setAttribute('aria-expanded','false');
+    })();
+  </script>
 </body>
 </html>
