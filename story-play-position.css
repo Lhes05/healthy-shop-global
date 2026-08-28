@@ -19,6 +19,7 @@
 }
 
 /* Remove the unused top navigation links without changing page sections. */
+.navlinks,
 header a[href="#why-sante"],
 header a[href="#products"],
 header a[href="#business"],
