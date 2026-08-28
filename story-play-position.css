@@ -17,3 +17,14 @@
     transform: translateY(88px) !important;
   }
 }
+
+/* Keep the mobile navigation menu hidden on desktop; show it only when opened on mobile. */
+.mobile-nav-menu {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .mobile-nav-menu.is-open {
+    display: grid !important;
+  }
+}
