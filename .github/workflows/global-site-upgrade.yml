@@ -1,0 +1,80 @@
+name: Global Site Upgrade
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'style.css'
+      - 'story-play-position.css'
+      - '.github/workflows/global-site-upgrade.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Apply global SEO and trust layer
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          index = root / 'index.html'
+          html = index.read_text(encoding='utf-8')
+
+          marker = '<!-- SANTE-GLOBAL-LAYER -->'
+          if marker not in html:
+              head = '''\n  <!-- SANTE-GLOBAL-LAYER -->\n  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">\n  <meta name="theme-color" content="#087f45">\n  <meta name="author" content="Santé Everyday Wellness">\n  <meta name="application-name" content="Santé Everyday Wellness">\n  <link rel="canonical" href="https://lhes05.github.io/healthy-shop-global/">\n  <link rel="manifest" href="site.webmanifest">\n  <meta property="og:type" content="website">\n  <meta property="og:site_name" content="Santé Everyday Wellness">\n  <meta property="og:title" content="Santé Everyday Wellness — Better choices. Better everyday.">\n  <meta property="og:description" content="Discover everyday wellness, trusted products, real experiences and a supportive community with Santé.">\n  <meta property="og:url" content="https://lhes05.github.io/healthy-shop-global/">\n  <meta name="twitter:card" content="summary_large_image">\n  <meta name="twitter:title" content="Santé Everyday Wellness">\n  <meta name="twitter:description" content="Everyday wellness, real experiences and meaningful possibilities with Santé.">\n  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Santé Everyday Wellness","url":"https://lhes05.github.io/healthy-shop-global/","description":"Everyday wellness, products, real experiences and community.","inLanguage":"en"}</script>\n  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Santé International, Inc.","url":"https://www.mysante.com/","sameAs":["https://www.mysante.com/"]}</script>\n'''
+              html = html.replace('</head>', head + '</head>', 1)
+
+          language_marker = '<!-- SANTE-LANGUAGE-ARCHITECTURE -->'
+          if language_marker not in html:
+              language = '''\n  <!-- SANTE-LANGUAGE-ARCHITECTURE -->\n  <div class="sante-language-switcher" role="navigation" aria-label="Language and region">\n    <span class="sante-language-label">🌐 Language</span>\n    <a href="./" aria-current="page">English</a>\n    <a href="./ph/" title="Filipino version">Filipino</a>\n  </div>\n'''
+              html = html.replace('</body>', language + '</body>', 1)
+
+          footer_marker = '<!-- SANTE-GLOBAL-TRUST-FOOTER -->'
+          if footer_marker not in html:
+              footer = '''\n  <!-- SANTE-GLOBAL-TRUST-FOOTER -->\n  <div class="sante-global-footer" aria-label="Global information">\n    <div class="sante-global-footer-inner">\n      <span>© 2026 Santé Everyday Wellness</span>\n      <span class="sante-global-footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="https://www.mysante.com/" target="_blank" rel="noopener noreferrer">Official Santé</a></span>\n    </div>\n  </div>\n'''
+              html = html.replace('</body>', footer + '</body>', 1)
+
+          index.write_text(html, encoding='utf-8')
+
+          css = root / 'story-play-position.css'
+          css_text = css.read_text(encoding='utf-8')
+          css_marker = '/* Global language + trust layer */'
+          if css_marker not in css_text:
+              css_text += '''\n\n/* Global language + trust layer */\n.sante-language-switcher{position:fixed;right:24px;top:82px;z-index:90;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #d7e5dc;border-radius:999px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(7,75,47,.08);font-size:10px;font-weight:850}.sante-language-switcher a{color:#087f45;text-decoration:none;padding:4px 7px;border-radius:999px}.sante-language-switcher a:hover{background:#e7f6e9}.sante-language-label{color:#52605a}.sante-global-footer{margin-top:0;border-top:1px solid #d7e5dc;background:#f7fbf8;color:#52605a;font-size:10px}.sante-global-footer-inner{width:min(1320px,100%);margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.sante-global-footer-links{display:flex;gap:14px}.sante-global-footer a{color:#087f45;text-decoration:none;font-weight:850}@media(max-width:900px){.sante-language-switcher{position:absolute;right:16px;top:72px;font-size:9px}.sante-language-label{display:none}.sante-global-footer-inner{padding:16px;flex-direction:column;align-items:flex-start}.sante-global-footer-links{gap:12px}}\n'''
+              css.write_text(css_text, encoding='utf-8')
+
+          Path('ph').mkdir(exist_ok=True)
+          ph = Path('ph/index.html')
+          if not ph.exists():
+              ph.write_text('''<!doctype html><html lang="fil"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Santé Everyday Wellness — Filipino</title><meta name="description" content="Santé Everyday Wellness para sa Philippine audience."><link rel="canonical" href="https://lhes05.github.io/healthy-shop-global/ph/"><style>body{font-family:system-ui,sans-serif;margin:0;background:#f7fbf8;color:#102018}main{max-width:760px;margin:10vh auto;padding:32px;background:#fff;border:1px solid #d7e5dc;border-radius:24px;box-shadow:0 20px 50px #07502a14}a{color:#087f45;font-weight:800}h1{font-size:42px;line-height:1.05}p{line-height:1.7;color:#52605a}.note{padding:14px 16px;background:#e7f6e9;border-radius:14px}</style></head><body><main><p>🇵🇭 Filipino</p><h1>Santé Everyday Wellness</h1><p>Maligayang pagdating sa Philippine version ng Santé Everyday Wellness.</p><p class="note">Ang full Filipino translation ng pangunahing website ay naka-prepare bilang susunod na localization phase para matiyak na tama at natural ang bawat translation.</p><p><a href="../">← Back to Global English</a></p></main></body></html>''', encoding='utf-8')
+
+          Path('privacy.html').write_text('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy | Santé Everyday Wellness</title><meta name="description" content="Privacy information for Santé Everyday Wellness."><style>body{font-family:system-ui,sans-serif;max-width:900px;margin:6vh auto;padding:24px;line-height:1.7;color:#102018}a{color:#087f45}</style></head><body><h1>Privacy</h1><p>For the authoritative Santé privacy notice and policy, please review the official Santé document.</p><p><a href="https://international.mysante.com/images/download/privacynotice_2019.pdf">Official Santé Privacy Notice and Policy</a></p><p><a href="./">← Back to Santé Everyday Wellness</a></p></body></html>''', encoding='utf-8')
+
+          Path('terms.html').write_text('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Terms | Santé Everyday Wellness</title><meta name="description" content="Terms and conditions for Santé services and programs."><style>body{font-family:system-ui,sans-serif;max-width:900px;margin:6vh auto;padding:24px;line-height:1.7;color:#102018}a{color:#087f45}</style></head><body><h1>Terms &amp; Conditions</h1><p>This website provides information and links related to Santé Everyday Wellness. For the authoritative current terms governing Santé products, services, ordering systems and business programs, review the official Santé terms.</p><p><a href="https://mysante.com/terms-conditions">Official Santé Terms &amp; Conditions</a></p><p><a href="./">← Back to Santé Everyday Wellness</a></p></body></html>''', encoding='utf-8')
+
+          Path('404.html').write_text('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found | Santé Everyday Wellness</title><meta name="robots" content="noindex"><style>body{font-family:system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;margin:0;background:#f7fbf8;color:#102018;text-align:center}main{padding:32px}a{display:inline-flex;margin-top:14px;padding:12px 18px;border-radius:999px;background:#087f45;color:#fff;text-decoration:none;font-weight:800}</style></head><body><main><div style="font-size:56px">🌿</div><h1>We couldn't find that page.</h1><p>Let's get you back to Santé Everyday Wellness.</p><a href="./">Back to home</a></main></body></html>''', encoding='utf-8')
+
+          Path('security.txt').write_text('Contact: mailto:customerservice@mysante.com\nPolicy: https://mysante.com/terms-conditions\nCanonical: https://lhes05.github.io/healthy-shop-global/security.txt\n', encoding='utf-8')
+
+          Path('sitemap.xml').write_text('''<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://lhes05.github.io/healthy-shop-global/</loc></url>\n  <url><loc>https://lhes05.github.io/healthy-shop-global/ph/</loc></url>\n  <url><loc>https://lhes05.github.io/healthy-shop-global/privacy.html</loc></url>\n  <url><loc>https://lhes05.github.io/healthy-shop-global/terms.html</loc></url>\n</urlset>\n''', encoding='utf-8')
+
+      - name: Commit generated global layer
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html story-play-position.css ph/index.html privacy.html terms.html 404.html security.txt sitemap.xml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Apply global UX SEO trust and localization layer [skip ci]"
+          git push
