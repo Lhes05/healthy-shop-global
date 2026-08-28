@@ -1,53 +1,22 @@
-/* Real Stories — portrait fit, clarity, and circle-safe framing */
+/* Real Stories — keep the portrait perfectly fitted inside its circular frame */
 .stories-grid .story-card img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: center center;
-  filter: brightness(1.08) contrast(1.06) saturate(1.04);
-  image-rendering: auto;
-}
-
-/* Keep the portrait subject cleanly inside the circular photo treatment. */
-.stories-grid .story-card .story-photo,
-.stories-grid .story-card .story-avatar,
-.stories-grid .story-card .story-image,
-.stories-grid .story-card img.story-photo,
-.stories-grid .story-card img.story-avatar,
-.stories-grid .story-card img.story-image {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: center center;
-  border-radius: 50%;
-  filter: brightness(1.1) contrast(1.07) saturate(1.05);
-}
-
-/* If the photo sits inside a dedicated circular wrapper, don't let it spill. */
-.stories-grid .story-card .story-photo-wrap,
-.stories-grid .story-card .story-avatar-wrap,
-.stories-grid .story-card .story-circle {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 50% !important;
   overflow: hidden;
-  background: #f3f8f5;
+  filter: brightness(1.08) contrast(1.08) saturate(1.04);
 }
 
-.stories-grid .story-card .story-photo-wrap img,
-.stories-grid .story-card .story-avatar-wrap img,
-.stories-grid .story-card .story-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  border-radius: 50%;
-  filter: brightness(1.1) contrast(1.07) saturate(1.05);
+.stories-grid .story-card {
+  border-radius: 50% !important;
+  overflow: hidden !important;
 }
 
-/* Preserve the existing story-card/play interaction. */
+/* Preserve the play control above the circular portrait */
 .stories-grid .story-card .story-play {
   background: transparent !important;
   border: 2px solid rgba(255, 255, 255, 0.95) !important;
@@ -62,10 +31,6 @@
 }
 
 @media (max-width: 600px) {
-  .stories-grid .story-card img {
-    aspect-ratio: 1 / 1;
-  }
-
   .stories-grid .story-card .story-play {
     transform: translateY(88px) !important;
   }
