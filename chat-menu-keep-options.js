@@ -18,5 +18,16 @@
     const videoLink=section.querySelector('.opportunity-video-link');
     if(videoLink){videoLink.addEventListener('click',function(event){event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();const modal=document.getElementById('testimonyModal');const dialog=modal&&modal.querySelector('.testimony-dialog');if(!modal||!dialog)return;const old=document.getElementById('testimonyFrame');if(old){try{old.pause?.()}catch(_e){}old.remove()}const player=document.createElement('iframe');player.id='testimonyFrame';player.src='https://www.youtube.com/embed/VZGViq5kzHA?autoplay=1&rel=0';player.title='Final Website Video';player.allow='autoplay; encrypted-media; picture-in-picture';player.allowFullscreen=true;player.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000';dialog.appendChild(player);modal.classList.add('is-open');document.body.classList.add('modal-open');},true);}
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){init();addRealStoriesSection();addOpportunitySection();});else{init();addRealStoriesSection();addOpportunitySection();}
+  function wireBusinessNavigation(){
+    const goToOpportunity=function(event){
+      event.preventDefault();
+      const target=document.getElementById('opportunity-section');
+      if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    document.querySelectorAll('.navlinks a[href="#business"], .mobile-nav-menu a[href="#business"]').forEach(function(link){
+      link.setAttribute('href','#opportunity-section');
+      link.addEventListener('click',goToOpportunity,true);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){init();addRealStoriesSection();addOpportunitySection();wireBusinessNavigation();});else{init();addRealStoriesSection();addOpportunitySection();wireBusinessNavigation();}
 })();
