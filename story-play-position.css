@@ -24,7 +24,3 @@
 /* Keep the global footer quiet and utility-focused. */
 .sante-global-footer { font-size:10px; }
 .sante-global-footer-inner { max-width:1320px; }
-
-
-/* Global language + trust layer */
-.sante-language-switcher{position:fixed;right:24px;top:82px;z-index:90;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #d7e5dc;border-radius:999px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(7,75,47,.08);font-size:10px;font-weight:850}.sante-language-switcher a{color:#087f45;text-decoration:none;padding:4px 7px;border-radius:999px}.sante-language-switcher a:hover{background:#e7f6e9}.sante-language-label{color:#52605a}.sante-global-footer{margin-top:0;border-top:1px solid #d7e5dc;background:#f7fbf8;color:#52605a;font-size:10px}.sante-global-footer-inner{width:min(1320px,100%);margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.sante-global-footer-links{display:flex;gap:14px}.sante-global-footer a{color:#087f45;text-decoration:none;font-weight:850}@media(max-width:900px){.sante-language-switcher{position:absolute;right:16px;top:72px;font-size:9px}.sante-language-label{display:none}.sante-global-footer-inner{padding:16px;flex-direction:column;align-items:flex-start}.sante-global-footer-links{gap:12px}}
