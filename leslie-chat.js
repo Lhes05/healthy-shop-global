@@ -92,8 +92,6 @@
     }
 
     // Capture Talk to Leslie before the existing panel-level menu handler.
-    // The older menu handler uses stopImmediatePropagation on the panel,
-    // so document-capture must get the click first.
     if (!window.__leslieTalkCaptureInstalled) {
       window.__leslieTalkCaptureInstalled = true;
       document.addEventListener('click', function (e) {
@@ -160,7 +158,6 @@
       });
     });
 
-    // Reset all Leslie subviews whenever the main chat panel closes.
     const toggle = document.getElementById('helpChatToggle');
     if (toggle) {
       toggle.addEventListener('click', function () {
@@ -175,4 +172,44 @@
   else initLeslieChat();
   const observer = new MutationObserver(initLeslieChat);
   observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+/* Restore the Watch Testimonies YouTube video.
+   The current index uses a <video> element but passes it a YouTube embed URL,
+   which browsers cannot play as a native video source. Intercept the button
+   before the old handler and replace the player with a YouTube iframe. */
+(function () {
+  function installTestimonyFix() {
+    const button = document.getElementById('testimonyOpen');
+    const modal = document.getElementById('testimonyModal');
+    if (!button || !modal || window.__testimonyYouTubeFixInstalled) return;
+    window.__testimonyYouTubeFixInstalled = true;
+
+    document.addEventListener('click', function (event) {
+      const target = event.target.closest && event.target.closest('#testimonyOpen');
+      if (!target) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      const oldPlayer = document.getElementById('testimonyFrame');
+      if (!oldPlayer) return;
+
+      const iframe = document.createElement('iframe');
+      iframe.id = 'testimonyFrame';
+      iframe.src = 'https://www.youtube.com/embed/pH9Pi4dTuRg?autoplay=1&rel=0';
+      iframe.title = 'Santé Testimony';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000';
+      oldPlayer.replaceWith(iframe);
+
+      modal.classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }, true);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installTestimonyFix);
+  else installTestimonyFix();
 })();
