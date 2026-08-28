@@ -6,25 +6,89 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
   transform: translateY(105px) !important;
 }
+.stories-grid .story-card .story-play span { color: #087f45 !important; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7); }
+@media (max-width: 600px) { .stories-grid .story-card .story-play { transform: translateY(88px) !important; } }
 
-.stories-grid .story-card .story-play span {
-  color: #087f45 !important;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7);
+/* Global premium polish — visual/UX layer only; existing sections and content stay intact. */
+:root { --premium-green:#087f45; --premium-deep:#063d25; --premium-ink:#102018; --premium-muted:#52605a; --premium-line:#d7e5dc; }
+html { scroll-behavior:smooth; }
+body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+.nav { position:sticky !important; top:0; z-index:100 !important; background:rgba(255,255,255,.96) !important; backdrop-filter:saturate(125%) blur(10px); box-shadow:0 1px 0 rgba(16,32,24,.04); }
+.navin { min-height:74px !important; }
+.navlinks { gap:24px !important; }
+.navlinks a { position:relative; padding:8px 0; color:var(--premium-ink); transition:color .18s ease; }
+.navlinks a::after { content:""; position:absolute; left:0; right:0; bottom:1px; height:2px; border-radius:999px; background:var(--premium-green); transform:scaleX(0); transform-origin:center; transition:transform .18s ease; }
+.navlinks a:hover { color:var(--premium-green); }
+.navlinks a:hover::after, .navlinks a:focus-visible::after { transform:scaleX(1); }
+.hero { padding-top:30px !important; }
+.hero-grid { gap:42px !important; padding-bottom:38px !important; }
+.hero h1 { letter-spacing:-4px; }
+.hero-lead { max-width:650px; line-height:1.62 !important; }
+.hero-shop { box-shadow:0 14px 28px rgba(8,127,69,.18) !important; transition:transform .18s ease, box-shadow .18s ease; }
+.hero-shop:hover { transform:translateY(-2px); box-shadow:0 18px 34px rgba(8,127,69,.22) !important; }
+.hero-why { transition:border-color .18s ease, transform .18s ease; }
+.hero-why:hover { border-color:#9fc9b0 !important; transform:translateY(-2px); }
+.stats-strip { padding:22px 0 24px !important; }
+.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.stat-card:hover,.why-card:hover,.product-card:hover,.more-than-card:hover,.three-simple-step-card:hover,.discount-card:hover { transform:translateY(-3px); border-color:#c4dacf; box-shadow:0 18px 38px rgba(7,75,47,.10); }
+.why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:92px; }
+.why-section { padding:72px 0 84px !important; }
+.products-section { padding:84px 0 96px !important; }
+.products-heading p,.why-heading p,.stories-heading p { line-height:1.65 !important; }
+.product-card { box-shadow:0 12px 30px rgba(7,75,47,.07) !important; }
+.product-card>img { background:#f7fbf8 !important; }
+.barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:90px !important; padding-bottom:100px !important; }
+.wellness-benefits>div,.simple-grain-benefit { transition:transform .16s ease, border-color .16s ease, background .16s ease; }
+.wellness-benefits>div:hover,.simple-grain-benefit:hover { transform:translateY(-2px); border-color:#bdd8ca; background:#fbfefc; }
+.testimony-button,.barley-feature-cta,.discount-button,.inquiry-submit { transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.testimony-button:hover,.barley-feature-cta:hover,.discount-button:hover,.inquiry-submit:hover { transform:translateY(-2px); box-shadow:0 16px 30px rgba(8,127,69,.18); }
+.stories-section { padding:86px 0 96px !important; }
+.story-card { transition:transform .18s ease, box-shadow .18s ease; }
+.story-card:hover { transform:translateY(-3px); box-shadow:0 18px 38px rgba(7,75,47,.13) !important; }
+#real-stories { scroll-margin-top:92px; }
+#opportunity-section { scroll-margin-top:92px; }
+.opportunity-card { transition:transform .18s ease, box-shadow .18s ease; }
+.opportunity-card:hover { transform:translateY(-3px); box-shadow:0 18px 36px rgba(0,0,0,.14) !important; }
+.opportunity-video-link { transition:transform .18s ease, box-shadow .18s ease; }
+.opportunity-video-link:hover { transform:translateY(-2px); box-shadow:0 28px 56px rgba(0,0,0,.18) !important; }
+.testimony-modal { backdrop-filter:blur(4px); }
+.testimony-dialog { max-width:980px !important; }
+.help-chat-widget { right:24px !important; bottom:24px !important; }
+.help-chat-toggle { min-height:48px !important; box-shadow:0 14px 32px rgba(8,127,69,.24) !important; transition:transform .18s ease, box-shadow .18s ease; }
+.help-chat-toggle:hover { transform:translateY(-2px); box-shadow:0 18px 38px rgba(8,127,69,.28) !important; }
+.help-chat-panel { box-shadow:0 26px 60px rgba(7,75,47,.20) !important; }
+
+/* Mobile-first refinements */
+@media(max-width:900px){
+  .navin { min-height:68px !important; }
+  .hero { padding-top:24px !important; }
+  .hero-grid { gap:18px !important; padding-bottom:28px !important; }
+  .hero-copy { padding-top:16px !important; }
+  .hero-lead { line-height:1.58 !important; }
+  .why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:82px; }
+  .why-section { padding:62px 0 72px !important; }
+  .products-section { padding:70px 0 80px !important; }
+  .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:68px !important; padding-bottom:78px !important; }
+  .stories-section { padding:68px 0 78px !important; }
+  #real-stories,#opportunity-section { scroll-margin-top:82px; }
 }
-
-@media (max-width: 600px) {
-  .stories-grid .story-card .story-play {
-    transform: translateY(88px) !important;
-  }
+@media(max-width:600px){
+  .wrap { padding-left:16px !important; padding-right:16px !important; }
+  .navin { min-height:64px !important; }
+  .hero { padding-top:18px !important; }
+  .hero h1 { letter-spacing:-2.3px !important; }
+  .hero-lead { font-size:16px !important; line-height:1.58 !important; }
+  .hero-actions { gap:9px !important; }
+  .hero-shop,.hero-why { min-height:48px !important; height:48px !important; }
+  .stats-strip { padding:14px 0 18px !important; }
+  .why-section { padding:50px 0 60px !important; }
+  .products-section { padding:54px 0 64px !important; }
+  .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:52px !important; padding-bottom:62px !important; }
+  .stories-section { padding:52px 0 62px !important; }
+  .help-chat-widget { right:14px !important; bottom:14px !important; }
+  .help-chat-toggle { min-height:46px !important; }
 }
 
 /* Keep the mobile navigation menu hidden on desktop; show it only when opened on mobile. */
-.mobile-nav-menu {
-  display: none !important;
-}
-
-@media (max-width: 900px) {
-  .mobile-nav-menu.is-open {
-    display: grid !important;
-  }
-}
+.mobile-nav-menu { display:none !important; }
+@media(max-width:900px){ .mobile-nav-menu.is-open { display:grid !important; } }
