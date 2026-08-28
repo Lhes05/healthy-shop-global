@@ -32,25 +32,69 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLeslieChat);else initLeslieChat();
   const observer=new MutationObserver(initLeslieChat);observer.observe(document.documentElement,{childList:true,subtree:true});
 
-  /* Testimony YouTube player: open in an iframe and hard-stop/clear it on every close path. */
+  /* Stable testimony/story player: every open creates a fresh player and every close destroys it. */
   function installTestimonyFix(){
-    const button=document.getElementById('testimonyOpen'),modal=document.getElementById('testimonyModal');
-    if(!button||!modal||window.__testimonyYouTubeFixInstalled)return;
-    window.__testimonyYouTubeFixInstalled=true;
-    function getFrame(){return document.getElementById('testimonyFrame')}
-    function stopVideo(){const frame=getFrame();if(frame){frame.src='about:blank';frame.removeAttribute('src');frame.replaceWith(frame.cloneNode(false))}modal.classList.remove('is-open');document.body.classList.remove('modal-open')}
-    document.addEventListener('click',function(event){
-      const open=event.target.closest&&event.target.closest('#testimonyOpen');
-      if(open){
-        event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
-        const old=getFrame();if(!old)return;
-        const iframe=document.createElement('iframe');iframe.id='testimonyFrame';iframe.src='https://www.youtube.com/embed/pH9Pi4dTuRg?autoplay=1&rel=0';iframe.title='Santé Testimony';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;iframe.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000';old.replaceWith(iframe);modal.classList.add('is-open');document.body.classList.add('modal-open');return;
+    const modal=document.getElementById('testimonyModal');
+    if(!modal||window.__stableTestimonyPlayerInstalled)return;
+    window.__stableTestimonyPlayerInstalled=true;
+
+    function stopAndReset(){
+      const player=document.getElementById('testimonyFrame');
+      if(player){
+        try{ if(typeof player.pause==='function') player.pause(); }catch(_e){}
+        player.src='about:blank';
+        player.removeAttribute('src');
+        player.load?.();
+        player.remove();
       }
-      const close=event.target.closest&&event.target.closest('#testimonyClose');
-      if(close){event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();stopVideo();return}
-      if(event.target===modal){stopVideo()}
+      const dialog=modal.querySelector('.testimony-dialog');
+      if(dialog){
+        const close=dialog.querySelector('.testimony-close');
+        const blank=document.createElement('video');
+        blank.id='testimonyFrame';blank.controls=true;blank.playsInline=true;
+        blank.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000';
+        dialog.appendChild(blank);
+      }
+      modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+
+    function openPlayer(source){
+      const dialog=modal.querySelector('.testimony-dialog');
+      if(!dialog)return;
+      const old=document.getElementById('testimonyFrame');
+      if(old){try{old.pause?.()}catch(_e){};old.remove()}
+      let player;
+      if(/^https:\/\/www\.youtube\.com\/embed\//i.test(source)){
+        player=document.createElement('iframe');
+        player.src=source;player.title='Santé Testimony';player.allow='autoplay; encrypted-media; picture-in-picture';player.allowFullscreen=true;
+      }else{
+        player=document.createElement('video');player.src=source;player.controls=true;player.playsInline=true;player.autoplay=true;
+      }
+      player.id='testimonyFrame';
+      player.style.cssText='display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000';
+      dialog.appendChild(player);
+      modal.classList.add('is-open');document.body.classList.add('modal-open');
+      if(player.tagName==='VIDEO')player.play().catch(()=>{});
+    }
+
+    document.addEventListener('click',function(event){
+      const story=event.target.closest&&event.target.closest('.story-card');
+      if(story){
+        event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+        openPlayer(story.dataset.video||'');return;
+      }
+      const testimony=event.target.closest&&event.target.closest('#testimonyOpen');
+      if(testimony){
+        event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+        openPlayer('https://www.youtube.com/embed/pH9Pi4dTuRg?autoplay=1&rel=0');return;
+      }
+      if(event.target.closest&&event.target.closest('#testimonyClose')){
+        event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();stopAndReset();return;
+      }
+      if(event.target===modal){stopAndReset();}
     },true);
-    document.addEventListener('keydown',function(event){if(event.key==='Escape'&&modal.classList.contains('is-open')){event.preventDefault();stopVideo()}},true);
+    document.addEventListener('keydown',function(event){if(event.key==='Escape'&&modal.classList.contains('is-open')){event.preventDefault();event.stopPropagation();stopAndReset();}},true);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installTestimonyFix);else installTestimonyFix();
 })();
