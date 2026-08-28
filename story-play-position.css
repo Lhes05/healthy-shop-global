@@ -1,110 +1,21 @@
-/* Story play-button positioning */
+/* Story play-button positioning only.
+   Keep this file focused on the approved story-card control.
+   Global layout, navigation, chat and section styling belong in style.css. */
 .stories-grid .story-card .story-play {
   background: transparent !important;
-  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid rgba(255,255,255,.95) !important;
   color: #087f45 !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
   transform: translateY(105px) !important;
 }
-.stories-grid .story-card .story-play span { color: #087f45 !important; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7); }
-@media (max-width: 600px) { .stories-grid .story-card .story-play { transform: translateY(88px) !important; } }
 
-/* Global premium polish — visual/UX layer only; existing sections and content stay intact. */
-:root { --premium-green:#087f45; --premium-deep:#063d25; --premium-ink:#102018; --premium-muted:#52605a; --premium-line:#d7e5dc; }
-html { scroll-behavior:smooth; }
-body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
-.nav { position:sticky !important; top:0; z-index:100 !important; background:rgba(255,255,255,.96) !important; backdrop-filter:saturate(125%) blur(10px); box-shadow:0 1px 0 rgba(16,32,24,.04); }
-.navin { min-height:74px !important; }
-.navlinks { gap:24px !important; }
-.navlinks a { position:relative; padding:8px 0; color:var(--premium-ink); transition:color .18s ease; }
-.navlinks a::after { content:""; position:absolute; left:0; right:0; bottom:1px; height:2px; border-radius:999px; background:var(--premium-green); transform:scaleX(0); transform-origin:center; transition:transform .18s ease; }
-.navlinks a:hover { color:var(--premium-green); }
-.navlinks a:hover::after, .navlinks a:focus-visible::after { transform:scaleX(1); }
-.hero { padding-top:30px !important; }
-.hero-grid { gap:42px !important; padding-bottom:38px !important; }
-.hero h1 { letter-spacing:-4px; }
-.hero-lead { max-width:650px; line-height:1.62 !important; }
-.hero-shop { box-shadow:0 14px 28px rgba(8,127,69,.18) !important; transition:transform .18s ease, box-shadow .18s ease; }
-.hero-shop:hover { transform:translateY(-2px); box-shadow:0 18px 34px rgba(8,127,69,.22) !important; }
-.hero-why { transition:border-color .18s ease, transform .18s ease; }
-.hero-why:hover { border-color:#9fc9b0 !important; transform:translateY(-2px); }
-.stats-strip { padding:22px 0 24px !important; }
-.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
-.stat-card:hover,.why-card:hover,.product-card:hover,.more-than-card:hover,.three-simple-step-card:hover,.discount-card:hover { transform:translateY(-3px); border-color:#c4dacf; box-shadow:0 18px 38px rgba(7,75,47,.10); }
-.stats-strip::before { content:"Global wellness community  •  Founded 2007  •  International reach  •  Quality-focused products"; display:block; width:min(1320px,100%); margin:0 auto 14px; padding:0 24px; color:#52605a; text-align:center; font-size:10px; line-height:1.4; letter-spacing:.55px; font-weight:800; }
-.why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:92px; }
-.why-section { padding:72px 0 84px !important; }
-.products-section { padding:84px 0 96px !important; }
-.products-heading p,.why-heading p,.stories-heading p { line-height:1.65 !important; }
-.product-card { box-shadow:0 12px 30px rgba(7,75,47,.07) !important; }
-.product-card>img { background:#f7fbf8 !important; }
-.barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:90px !important; padding-bottom:100px !important; }
-.wellness-benefits>div,.simple-grain-benefit { transition:transform .16s ease, border-color .16s ease, background .16s ease; }
-.wellness-benefits>div:hover,.simple-grain-benefit:hover { transform:translateY(-2px); border-color:#bdd8ca; background:#fbfefc; }
-.testimony-button,.barley-feature-cta,.discount-button,.inquiry-submit { transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
-.testimony-button:hover,.barley-feature-cta:hover,.discount-button:hover,.inquiry-submit:hover { transform:translateY(-2px); box-shadow:0 16px 30px rgba(8,127,69,.18); }
-.stories-section { padding:86px 0 96px !important; }
-.story-card { transition:transform .18s ease, box-shadow .18s ease; }
-.story-card:hover { transform:translateY(-3px); box-shadow:0 18px 38px rgba(7,75,47,.13) !important; }
-#real-stories,#opportunity-section { scroll-margin-top:92px; }
-.opportunity-card { transition:transform .18s ease, box-shadow .18s ease; }
-.opportunity-card:hover { transform:translateY(-3px); box-shadow:0 18px 36px rgba(0,0,0,.14) !important; }
-.opportunity-video-link { transition:transform .18s ease, box-shadow .18s ease; }
-.opportunity-video-link:hover { transform:translateY(-2px); box-shadow:0 28px 56px rgba(0,0,0,.18) !important; }
-.testimony-modal { backdrop-filter:blur(4px); }
-.testimony-dialog { max-width:980px !important; }
-.help-chat-widget { right:24px !important; bottom:24px !important; }
-.help-chat-toggle { min-height:48px !important; box-shadow:0 14px 32px rgba(8,127,69,.24) !important; transition:transform .18s ease, box-shadow .18s ease; }
-.help-chat-toggle:hover { transform:translateY(-2px); box-shadow:0 18px 38px rgba(8,127,69,.28) !important; }
-.help-chat-panel { box-shadow:0 26px 60px rgba(7,75,47,.20) !important; }
-
-@media(max-width:900px){
-  .navin { min-height:68px !important; }
-  .hero { padding-top:24px !important; }
-  .hero-grid { gap:18px !important; padding-bottom:28px !important; }
-  .hero-copy { padding-top:16px !important; }
-  .hero-lead { line-height:1.58 !important; }
-  .why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:82px; }
-  .why-section { padding:62px 0 72px !important; }
-  .products-section { padding:70px 0 80px !important; }
-  .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:68px !important; padding-bottom:78px !important; }
-  .stories-section { padding:68px 0 78px !important; }
-  #real-stories,#opportunity-section { scroll-margin-top:82px; }
-}
-@media(max-width:600px){
-  .wrap { padding-left:16px !important; padding-right:16px !important; }
-  .navin { min-height:64px !important; }
-  .hero { padding-top:18px !important; }
-  .hero h1 { letter-spacing:-2.3px !important; }
-  .hero-lead { font-size:16px !important; line-height:1.58 !important; }
-  .hero-actions { gap:9px !important; }
-  .hero-shop,.hero-why { min-height:48px !important; height:48px !important; }
-  .stats-strip { padding:14px 0 18px !important; }
-  .stats-strip::before { padding:0 16px; font-size:9px; line-height:1.5; }
-  .why-section { padding:50px 0 60px !important; }
-  .products-section { padding:54px 0 64px !important; }
-  .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:52px !important; padding-bottom:62px !important; }
-  .stories-section { padding:52px 0 62px !important; }
+.stories-grid .story-card .story-play span {
+  color: #087f45 !important;
+  text-shadow: 0 1px 3px rgba(255,255,255,.7);
 }
 
-/* Keep the mobile navigation menu hidden on desktop; show it only when opened on mobile. */
-.mobile-nav-menu { display:none !important; }
-@media(max-width:900px){ .mobile-nav-menu.is-open { display:grid !important; } }
-
-/* Premium global chat: compact, helpful, brand-consistent, never intrusive. */
-.help-chat-widget { right:22px !important; bottom:20px !important; z-index:950 !important; }
-.help-chat-toggle { position:relative !important; min-height:50px !important; padding:0 19px 0 16px !important; border:1px solid rgba(255,255,255,.18) !important; border-radius:999px !important; background:#087f45 !important; color:#fff !important; box-shadow:0 12px 30px rgba(7,75,47,.22) !important; display:inline-flex !important; align-items:center !important; gap:9px !important; font-size:13px !important; letter-spacing:.1px !important; transition:transform .18s ease,box-shadow .18s ease,background .18s ease !important; }
-.help-chat-toggle::before { content:''; width:9px; height:9px; border-radius:50%; background:#b8e86c; box-shadow:0 0 0 4px rgba(184,232,108,.14); flex:0 0 9px; }
-.help-chat-toggle:hover { background:#066b3b !important; transform:translateY(-2px) !important; box-shadow:0 16px 34px rgba(7,75,47,.26) !important; }
-.help-chat-panel { width:306px !important; margin-bottom:11px !important; padding:10px !important; border:1px solid #dce9e1 !important; border-radius:20px !important; background:rgba(255,255,255,.98) !important; box-shadow:0 22px 55px rgba(7,75,47,.18) !important; backdrop-filter:blur(10px) !important; }
-.help-chat-title { position:relative !important; padding:12px 11px 13px 38px !important; font-size:15px !important; letter-spacing:-.15px !important; }
-.help-chat-title::before { content:'✓'; position:absolute; left:9px; top:10px; width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; background:#e7f6e9; color:#087f45; font-size:12px; font-weight:950; }
-.help-chat-options { gap:7px !important; }
-.help-chat-option { border:1px solid #e1ebe5 !important; border-radius:12px !important; background:#fbfdfb !important; padding:11px 12px !important; font-size:12px !important; font-weight:850 !important; transition:transform .16s ease,border-color .16s ease,background .16s ease !important; }
-.help-chat-option:hover { background:#f1f8f3 !important; border-color:#cfe1d5 !important; transform:translateY(-1px) !important; }
-.leslie-contact-option { border-color:#e1ebe5 !important; border-radius:12px !important; }
-@media(max-width:600px){ .help-chat-widget { right:14px !important; bottom:14px !important; } .help-chat-toggle { min-height:46px !important; padding:0 16px 0 14px !important; font-size:12px !important; } .help-chat-panel { width:min(306px,calc(100vw - 28px)) !important; border-radius:18px !important; } }
-
-
-/* Global language + trust layer */
-.sante-language-switcher{position:fixed;right:24px;top:82px;z-index:90;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #d7e5dc;border-radius:999px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(7,75,47,.08);font-size:10px;font-weight:850}.sante-language-switcher a{color:#087f45;text-decoration:none;padding:4px 7px;border-radius:999px}.sante-language-switcher a:hover{background:#e7f6e9}.sante-language-label{color:#52605a}.sante-global-footer{margin-top:0;border-top:1px solid #d7e5dc;background:#f7fbf8;color:#52605a;font-size:10px}.sante-global-footer-inner{width:min(1320px,100%);margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.sante-global-footer-links{display:flex;gap:14px}.sante-global-footer a{color:#087f45;text-decoration:none;font-weight:850}@media(max-width:900px){.sante-language-switcher{position:absolute;right:16px;top:72px;font-size:9px}.sante-language-label{display:none}.sante-global-footer-inner{padding:16px;flex-direction:column;align-items:flex-start}.sante-global-footer-links{gap:12px}}
+@media (max-width:600px) {
+  .stories-grid .story-card .story-play {
+    transform: translateY(88px) !important;
+  }
+}
