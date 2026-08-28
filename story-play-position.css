@@ -1,36 +1,66 @@
-/* Real Stories — keep the portrait perfectly fitted inside its circular frame */
-.stories-grid .story-card img {
-  width: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  border-radius: 50% !important;
-  overflow: hidden;
-  filter: brightness(1.08) contrast(1.08) saturate(1.04);
-}
-
+/* Real Stories — circular portrait frame fitted to the image, not the whole card */
 .stories-grid .story-card {
-  border-radius: 50% !important;
+  position: relative !important;
+  border-radius: 18px !important;
   overflow: hidden !important;
 }
 
-/* Preserve the play control above the circular portrait */
+.stories-grid .story-card img {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 1.33 / 1 !important;
+  height: auto !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  filter: brightness(1.08) contrast(1.08) saturate(1.04);
+}
+
+/* The portrait itself is the circular frame */
+.stories-grid .story-card::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: min(62%, 210px);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border: 5px solid rgba(255,255,255,.96);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18), inset 0 0 0 1px rgba(8,127,69,.15);
+  pointer-events: none;
+}
+
+/* Crop the actual image into the circular portrait area */
+.stories-grid .story-card img {
+  clip-path: circle(31% at 50% 50%);
+}
+
 .stories-grid .story-card .story-play {
-  background: transparent !important;
-  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  z-index: 4;
+  background: rgba(255,255,255,.94) !important;
+  border: 2px solid rgba(255,255,255,.98) !important;
   color: #087f45 !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18) !important;
   transform: translateY(105px) !important;
 }
 
 .stories-grid .story-card .story-play span {
   color: #087f45 !important;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7);
+  text-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .stories-grid .story-card::before {
+    width: min(62%, 200px);
+  }
 }
 
 @media (max-width: 600px) {
+  .stories-grid .story-card::before {
+    width: min(62%, 190px);
+  }
+
   .stories-grid .story-card .story-play {
     transform: translateY(88px) !important;
   }
