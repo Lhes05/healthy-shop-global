@@ -1,0 +1,3 @@
+Contact: mailto:customerservice@mysante.com
+Policy: https://mysante.com/terms-conditions
+Canonical: https://lhes05.github.io/healthy-shop-global/security.txt
