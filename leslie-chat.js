@@ -1,5 +1,43 @@
 /* Leslie contact submenu + Chat Here automation */
 (function () {
+  function installPremiumPolish(){
+    if(document.getElementById('premium-polish-styles'))return;
+    const style=document.createElement('style');
+    style.id='premium-polish-styles';
+    style.textContent=`
+      html{scroll-padding-top:76px}body{overflow-x:hidden}.nav{position:sticky;top:0;z-index:100;backdrop-filter:saturate(120%) blur(8px);background:rgba(255,255,255,.96)}
+      .wrap{width:min(1320px,100%);padding-left:24px;padding-right:24px}
+      .navin{min-height:74px}.navlinks{gap:24px}
+      .hero{padding-top:34px}.hero-grid{gap:42px;padding-bottom:40px}.hero-copy{padding:30px 0 54px}.hero h1{margin-bottom:24px}.hero-lead{margin-bottom:28px;line-height:1.6}.hero-actions{gap:14px}
+      .stats-strip{padding:24px 0 22px}.stats-grid{gap:16px}
+      .why-section{padding:76px 0 88px}.why-heading{margin-bottom:36px}.why-grid{gap:18px}.why-card{height:176px;min-height:176px;padding:22px}
+      .products-section{padding:88px 0 100px}.products-heading{margin-bottom:38px}.products-grid{gap:20px}.product-card{box-shadow:0 14px 32px rgba(7,75,47,.07)}.product-info{padding:18px 16px 16px}
+      .barley-wellness-section{padding:96px 0 108px}.barley-wellness-grid{gap:68px}.barley-wellness-copy>p{line-height:1.65;margin-bottom:28px}.wellness-benefits{gap:12px}
+      .simple-grain-section{padding:96px 0 108px}.simple-grain-grid{gap:78px}.simple-grain-copy>p{line-height:1.65;margin-bottom:32px}.simple-grain-benefits{gap:14px}
+      .discount-section{padding:88px 0 104px}.discount-heading{margin-bottom:38px}.discount-grid{gap:22px}
+      .more-than-section{padding:88px 0 100px}.more-than-heading{margin-bottom:36px}.more-than-grid{gap:16px}.more-than-card{padding:20px 18px}
+      .three-simple-steps-section{background:#fff;color:#102018;padding:88px 0 96px;scroll-margin-top:76px}.three-simple-steps-heading{margin:0 0 34px}.three-simple-steps-heading h2{margin:0;font-size:clamp(42px,4.8vw,62px);line-height:1.02;letter-spacing:-3px;font-weight:950}.three-simple-steps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.three-simple-step-card{border:1px solid #d7e5dc;border-radius:18px;background:#fff;padding:24px;box-shadow:0 12px 28px rgba(7,75,47,.06)}.three-simple-step-card>span{display:block;color:#087f45;font-size:10px;letter-spacing:1.5px;font-weight:950;margin-bottom:12px}.three-simple-step-card h3{margin:0 0 8px;font-size:20px;line-height:1.15}.three-simple-step-card p{margin:0;color:#52605a;font-size:13px;line-height:1.6}
+      .stories-section{padding:88px 0 100px}.stories-heading{margin-bottom:36px}.stories-grid{gap:18px}.story-card{box-shadow:0 14px 30px rgba(7,75,47,.08)}
+      #real-stories{padding:88px 0 100px}.real-stories-heading{margin-bottom:36px}.real-stories-shell{padding:18px;border-radius:30px}.real-stories-grid{gap:16px}.real-story-card{min-height:350px;padding:24px 22px 20px}.real-story-quote{line-height:1.7}.real-story-footer{margin-top:20px}.real-story-photo{width:126px;height:126px;flex-basis:126px}
+      .barley-feature-section{padding:96px 0 108px}.barley-feature-grid{gap:72px}.inquiry-section{padding:96px 0 108px}.inquiry-grid{gap:82px}.inquiry-form-card{padding:28px 24px 24px}
+      @media(max-width:1180px){.wrap{padding-left:24px;padding-right:24px}.hero-grid{gap:28px}.barley-wellness-grid{gap:42px}.simple-grain-grid{gap:52px}.inquiry-grid{gap:52px}}
+      @media(max-width:900px){.navin{min-height:68px}.navlinks{display:none}.hero{padding-top:26px}.hero-grid{gap:18px;padding-bottom:30px}.hero-copy{padding:18px 0 24px}.hero-lead{line-height:1.55}.stats-strip{padding:20px 0}.why-section{padding:64px 0 74px}.why-heading{margin-bottom:30px}.why-grid{gap:14px}.products-section{padding:70px 0 82px}.products-heading{margin-bottom:30px}.barley-wellness-section{padding:70px 0 82px}.barley-wellness-grid{gap:42px}.simple-grain-section{padding:70px 0 82px}.simple-grain-grid{gap:42px}.discount-section{padding:70px 0 82px}.discount-heading{margin-bottom:30px}.more-than-section{padding:70px 0 82px}.more-than-heading{margin-bottom:30px}.three-simple-steps-section{padding:70px 0 82px}.three-simple-steps-grid{grid-template-columns:1fr;gap:14px}.stories-section{padding:70px 0 82px}.stories-heading{margin-bottom:30px}.real-stories-grid{gap:14px}.barley-feature-section{padding:70px 0 82px}.barley-feature-grid{gap:42px}.inquiry-section{padding:70px 0 82px}.inquiry-grid{gap:42px}}
+      @media(max-width:600px){.wrap{padding-left:16px;padding-right:16px}.navin{min-height:64px}.hero{padding-top:20px}.hero-grid{gap:10px;padding-bottom:22px}.hero-copy{padding:14px 0 18px}.hero h1{margin-bottom:18px}.hero-lead{margin-bottom:22px;line-height:1.55}.hero-actions{gap:9px}.stats-strip{padding:16px 0 18px}.why-section{padding:54px 0 62px}.why-heading{margin-bottom:24px}.why-grid{gap:10px}.products-section{padding:58px 0 70px}.products-heading{margin-bottom:24px}.products-grid{gap:12px}.barley-wellness-section{padding:58px 0 70px}.barley-wellness-grid{gap:32px}.simple-grain-section{padding:58px 0 70px}.simple-grain-grid{gap:32px}.discount-section{padding:58px 0 70px}.discount-heading{margin-bottom:24px}.discount-grid{gap:14px}.more-than-section{padding:58px 0 70px}.more-than-heading{margin-bottom:24px}.three-simple-steps-section{padding:58px 0 70px}.three-simple-steps-heading{margin-bottom:24px}.three-simple-step-card{padding:20px}.stories-section{padding:58px 0 70px}.stories-heading{margin-bottom:24px}.real-stories-grid{gap:12px}.real-story-card{padding:20px 17px 16px}.real-story-photo{width:112px;height:112px;flex-basis:112px}.barley-feature-section{padding:58px 0 70px}.barley-feature-grid{gap:32px}.inquiry-section{padding:58px 0 70px}.inquiry-grid{gap:30px}.inquiry-form-card{padding:22px 16px 18px}}
+      .mobile-nav-toggle{display:none}
+      @media(max-width:900px){.mobile-nav-toggle{display:inline-flex;align-items:center;justify-content:center;width:42px;height:38px;border:1px solid #d7e5dc;border-radius:10px;background:#fff;color:#087f45;font:inherit;font-size:18px;cursor:pointer}.mobile-nav-menu{display:none;position:absolute;left:16px;right:16px;top:calc(100% + 8px);padding:10px;border:1px solid #d7e5dc;border-radius:16px;background:#fff;box-shadow:0 16px 36px rgba(7,75,47,.12)}.mobile-nav-menu.is-open{display:grid;gap:4px}.mobile-nav-menu a{padding:11px 12px;border-radius:10px;font-size:13px;font-weight:850}.mobile-nav-menu a:hover{background:#f1f8f3}.nav{position:sticky}.navin{position:relative}}
+    `;
+    document.head.appendChild(style);
+    const nav=document.querySelector('.nav .navin');
+    if(nav&&!document.getElementById('mobileNavToggle')){
+      const button=document.createElement('button');button.id='mobileNavToggle';button.className='mobile-nav-toggle';button.type='button';button.setAttribute('aria-label','Open menu');button.setAttribute('aria-expanded','false');button.textContent='☰';
+      const menu=document.createElement('div');menu.id='mobileNavMenu';menu.className='mobile-nav-menu';menu.setAttribute('aria-hidden','true');
+      menu.innerHTML='<a href="#why-sante">Why Santé</a><a href="#products">Products</a><a href="#business">Business</a><a href="#wellness">Wellness</a><a href="#barley">Barley</a>';
+      nav.appendChild(button);nav.appendChild(menu);
+      button.addEventListener('click',function(){const open=menu.classList.toggle('is-open');button.setAttribute('aria-expanded',open?'true':'false');button.setAttribute('aria-label',open?'Close menu':'Open menu');menu.setAttribute('aria-hidden',open?'false':'true')});
+      menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',function(){menu.classList.remove('is-open');button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open menu');menu.setAttribute('aria-hidden','true')}));
+    }
+  }
+
   function initLeslieChat() {
     const panel = document.getElementById('helpChatPanel');
     if (!panel || panel.dataset.leslieEnhanced === '1') return;
@@ -30,7 +68,8 @@
     const toggle=document.getElementById('helpChatToggle');if(toggle)toggle.addEventListener('click',()=>window.setTimeout(()=>{if(!panel.classList.contains('is-open'))showMain()},0));
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLeslieChat);else initLeslieChat();
-  const observer=new MutationObserver(initLeslieChat);observer.observe(document.documentElement,{childList:true,subtree:true});
+  installPremiumPolish();
+  const observer=new MutationObserver(function(){initLeslieChat();installPremiumPolish()});observer.observe(document.documentElement,{childList:true,subtree:true});
 
   /* Stable testimony/story player: every open creates a fresh player and every close destroys it. */
   function installTestimonyFix(){
