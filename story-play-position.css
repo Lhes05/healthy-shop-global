@@ -29,8 +29,9 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
 .hero-why { transition:border-color .18s ease, transform .18s ease; }
 .hero-why:hover { border-color:#9fc9b0 !important; transform:translateY(-2px); }
 .stats-strip { padding:22px 0 24px !important; }
-.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.stats-card,.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .stat-card:hover,.why-card:hover,.product-card:hover,.more-than-card:hover,.three-simple-step-card:hover,.discount-card:hover { transform:translateY(-3px); border-color:#c4dacf; box-shadow:0 18px 38px rgba(7,75,47,.10); }
+.stats-strip::before { content:"Global wellness community  •  Founded 2007  •  International reach  •  Quality-focused products"; display:block; width:min(1320px,100%); margin:0 auto 14px; padding:0 24px; color:#52605a; text-align:center; font-size:10px; line-height:1.4; letter-spacing:.55px; font-weight:800; }
 .why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:92px; }
 .why-section { padding:72px 0 84px !important; }
 .products-section { padding:84px 0 96px !important; }
@@ -45,8 +46,7 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
 .stories-section { padding:86px 0 96px !important; }
 .story-card { transition:transform .18s ease, box-shadow .18s ease; }
 .story-card:hover { transform:translateY(-3px); box-shadow:0 18px 38px rgba(7,75,47,.13) !important; }
-#real-stories { scroll-margin-top:92px; }
-#opportunity-section { scroll-margin-top:92px; }
+#real-stories,#opportunity-section { scroll-margin-top:92px; }
 .opportunity-card { transition:transform .18s ease, box-shadow .18s ease; }
 .opportunity-card:hover { transform:translateY(-3px); box-shadow:0 18px 36px rgba(0,0,0,.14) !important; }
 .opportunity-video-link { transition:transform .18s ease, box-shadow .18s ease; }
@@ -58,7 +58,6 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
 .help-chat-toggle:hover { transform:translateY(-2px); box-shadow:0 18px 38px rgba(8,127,69,.28) !important; }
 .help-chat-panel { box-shadow:0 26px 60px rgba(7,75,47,.20) !important; }
 
-/* Mobile-first refinements */
 @media(max-width:900px){
   .navin { min-height:68px !important; }
   .hero { padding-top:24px !important; }
@@ -81,6 +80,7 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
   .hero-actions { gap:9px !important; }
   .hero-shop,.hero-why { min-height:48px !important; height:48px !important; }
   .stats-strip { padding:14px 0 18px !important; }
+  .stats-strip::before { padding:0 16px; font-size:9px; line-height:1.5; }
   .why-section { padding:50px 0 60px !important; }
   .products-section { padding:54px 0 64px !important; }
   .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:52px !important; padding-bottom:62px !important; }
