@@ -1,0 +1,12 @@
+{
+  "name": "Santé Everyday Wellness",
+  "short_name": "Santé Wellness",
+  "description": "Santé Everyday Wellness — better choices for everyday wellness, community, and opportunity.",
+  "start_url": "/healthy-shop-global/",
+  "scope": "/healthy-shop-global/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#087f45",
+  "lang": "en",
+  "dir": "ltr"
+}
