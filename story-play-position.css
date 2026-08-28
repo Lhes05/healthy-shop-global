@@ -1,4 +1,4 @@
-/* Real Stories — circular portrait frame fitted to the image, not the whole card */
+/* Real Stories — larger circular portrait fitted to each story photo */
 .stories-grid .story-card {
   position: relative !important;
   border-radius: 18px !important;
@@ -13,27 +13,23 @@
   object-fit: cover !important;
   object-position: center center !important;
   filter: brightness(1.08) contrast(1.08) saturate(1.04);
+  clip-path: circle(38% at 50% 50%);
 }
 
-/* The portrait itself is the circular frame */
+/* Larger circular portrait frame — picture only */
 .stories-grid .story-card::before {
   content: "";
   position: absolute;
   z-index: 2;
   top: 50%;
   left: 50%;
-  width: min(62%, 210px);
+  width: min(76%, 270px);
   aspect-ratio: 1 / 1;
   transform: translate(-50%, -50%);
   border: 5px solid rgba(255,255,255,.96);
   border-radius: 50%;
   box-shadow: 0 8px 24px rgba(0,0,0,.18), inset 0 0 0 1px rgba(8,127,69,.15);
   pointer-events: none;
-}
-
-/* Crop the actual image into the circular portrait area */
-.stories-grid .story-card img {
-  clip-path: circle(31% at 50% 50%);
 }
 
 .stories-grid .story-card .story-play {
@@ -52,13 +48,21 @@
 
 @media (max-width: 900px) {
   .stories-grid .story-card::before {
-    width: min(62%, 200px);
+    width: min(76%, 250px);
+  }
+
+  .stories-grid .story-card img {
+    clip-path: circle(38% at 50% 50%);
   }
 }
 
 @media (max-width: 600px) {
   .stories-grid .story-card::before {
-    width: min(62%, 190px);
+    width: min(78%, 300px);
+  }
+
+  .stories-grid .story-card img {
+    clip-path: circle(39% at 50% 50%);
   }
 
   .stories-grid .story-card .story-play {
