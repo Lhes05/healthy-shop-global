@@ -7,110 +7,16 @@
     const order = panel && panel.querySelector('.help-chat-option[data-target="products"]');
     const back = document.getElementById('helpOrderBack');
     if (!panel || !options || !details || !order || !back) return;
-
-    order.addEventListener('click', function (event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      options.style.display = 'grid';
-      details.style.display = 'block';
-      details.setAttribute('aria-hidden', 'false');
-      panel.classList.add('is-open');
-      panel.setAttribute('aria-hidden', 'false');
-    }, true);
-
-    back.addEventListener('click', function (event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      details.style.display = 'none';
-      details.setAttribute('aria-hidden', 'true');
-      options.style.display = 'grid';
-    }, true);
-
-    panel.addEventListener('click', function () {
-      if (!details.contains(document.activeElement)) {
-        options.style.display = 'grid';
-      }
-    }, true);
+    order.addEventListener('click', function (event) { event.preventDefault(); event.stopImmediatePropagation(); options.style.display='grid'; details.style.display='block'; details.setAttribute('aria-hidden','false'); panel.classList.add('is-open'); panel.setAttribute('aria-hidden','false'); }, true);
+    back.addEventListener('click', function (event) { event.preventDefault(); event.stopImmediatePropagation(); details.style.display='none'; details.setAttribute('aria-hidden','true'); options.style.display='grid'; }, true);
+    panel.addEventListener('click', function () { if (!details.contains(document.activeElement)) options.style.display='grid'; }, true);
   }
-
   function addRealStoriesSection() {
     if (document.getElementById('real-stories')) return;
-    const anchor = document.getElementById('three-simple-steps');
-    if (!anchor) return;
-
-    if (!document.getElementById('real-stories-styles')) {
-      const style = document.createElement('style');
-      style.id = 'real-stories-styles';
-      style.textContent = `
-        #real-stories{background:#f5fbf7;color:#102018;padding:76px 0 82px;scroll-margin-top:76px}
-        .real-stories-heading{margin:0 0 30px}
-        .real-stories-eyebrow{display:block;margin:0 0 10px;color:#087f45;font-size:10px;letter-spacing:2px;font-weight:950}
-        .real-stories-heading h2{margin:0 0 10px;font-size:clamp(42px,5vw,64px);line-height:1.02;letter-spacing:-3.4px;font-weight:950;color:#102018}
-        .real-stories-heading p{margin:0;color:#52605a;font-size:15px;line-height:1.5}
-        .real-stories-shell{background:#fff;border:1px solid #e0ebe4;border-radius:28px;padding:16px;box-shadow:0 18px 44px rgba(7,75,47,.10)}
-        .real-stories-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-        .real-story-card{min-height:338px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:linear-gradient(180deg,#003824 0%,#002c1d 100%);color:#fff;padding:22px 20px 18px;display:flex;flex-direction:column;box-shadow:0 10px 24px rgba(7,75,47,.12);position:relative;overflow:hidden}
-        .real-story-quote-mark{font-size:44px;line-height:.7;color:#7ecb31;font-weight:950;margin-bottom:14px}
-        .real-story-quote{margin:0;color:#f7fbf8;font-size:13px;line-height:1.65;flex:1}
-        .real-story-quote em{font-style:normal;color:#fff}
-        .real-story-footer{display:flex;align-items:flex-end;gap:12px;margin-top:18px}
-        .real-story-photo{width:74px;height:74px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.72);flex:0 0 74px;background:#184d37}
-        .real-story-meta{min-width:0}
-        .real-story-name{margin:0;color:#7ecb31;font-size:13px;line-height:1.2;font-weight:950;letter-spacing:.25px}
-        .real-story-from{margin-top:4px;color:#fff;font-size:12px;line-height:1.25}
-        .real-story-stars{margin-top:7px;color:#ffc400;font-size:18px;letter-spacing:1px;line-height:1}
-        @media(max-width:900px){#real-stories{padding:62px 0 70px}.real-stories-grid{grid-template-columns:1fr;gap:14px}.real-story-card{min-height:0}}
-        @media(max-width:600px){#real-stories{padding:50px 0 58px}.real-stories-heading h2{font-size:40px;letter-spacing:-2.2px}.real-stories-shell{padding:10px;border-radius:22px}.real-story-card{padding:20px 17px 16px;border-radius:16px}.real-story-quote{font-size:12px;line-height:1.58}}
-      `;
-      document.head.appendChild(style);
-    }
-
-    const section = document.createElement('section');
-    section.id = 'real-stories';
-    section.innerHTML = `
-      <div class="wrap">
-        <div class="real-stories-heading">
-          <span class="real-stories-eyebrow">REAL STORIES</span>
-          <h2>Real people. Real experiences.</h2>
-          <p>Inspiring stories from OFWs around the world.</p>
-        </div>
-        <div class="real-stories-shell">
-          <div class="real-stories-grid">
-            <article class="real-story-card">
-              <div class="real-story-quote-mark">“</div>
-              <p class="real-story-quote">Hindi ko akalain na ang isang desisyon na gawin ang negosyo ng Santé Barley, ang magbibigay saakin ng magandang income bukod sa Salary ko dito sa Dubai, <em>“Always give your self and your dreams a chance”</em><br><br>sa mga kapwa ko OFW kayang kaya nyo din ito.</p>
-              <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/real story 1.png" alt="Sally OFW">
-                <div class="real-story-meta"><p class="real-story-name">-SALLY OFW</p><div class="real-story-from">from U.A.E</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
-              </div>
-            </article>
-            <article class="real-story-card">
-              <div class="real-story-quote-mark">“</div>
-              <p class="real-story-quote">Hindi naman ako naghahanap ng malaking pera. <em>“Ang gusto ko lang noon ay magkaroon ng ibang option. Nag-start ako by learning first and understanding how the business works. Hindi naging overnight ang results, pero at least may sinimulan akong buuin para sa future ko.”</em></p>
-              <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/real story 2.png" alt="Althea OFW">
-                <div class="real-story-meta"><p class="real-story-name">-ALTHEA OFW</p><div class="real-story-from">from Singapore</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
-              </div>
-            </article>
-            <article class="real-story-card">
-              <div class="real-story-quote-mark">“</div>
-              <p class="real-story-quote">Akala ko kailangan kong hintayin munang makauwi bago ako magsimula! <em>“OFW ako at dati, ang focus ko lang talaga ay kumita para sa pamilya. Pero habang tumatagal, naisip ko rin, paano naman kapag dumating yung panahon na gusto ko nang umuwi? Kaya nagsimula akong mag-explore ng opportunity na pwede kong matutunan habang nagtatrabaho pa ako abroad.”</em></p>
-              <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/real story 3.png" alt="Susan OFW">
-                <div class="real-story-meta"><p class="real-story-name">-SUSAN OFW</p><div class="real-story-from">from Hongkong</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    `;
-    anchor.insertAdjacentElement('afterend', section);
+    const anchor = document.getElementById('three-simple-steps'); if (!anchor) return;
+    if (!document.getElementById('real-stories-styles')) { const style=document.createElement('style'); style.id='real-stories-styles'; style.textContent=`#real-stories{background:#f5fbf7;color:#102018;padding:76px 0 82px;scroll-margin-top:76px}.real-stories-heading{margin:0 0 30px}.real-stories-eyebrow{display:block;margin:0 0 10px;color:#087f45;font-size:10px;letter-spacing:2px;font-weight:950}.real-stories-heading h2{margin:0 0 10px;font-size:clamp(42px,5vw,64px);line-height:1.02;letter-spacing:-3.4px;font-weight:950;color:#102018}.real-stories-heading p{margin:0;color:#52605a;font-size:15px;line-height:1.5}.real-stories-shell{background:#fff;border:1px solid #e0ebe4;border-radius:28px;padding:16px;box-shadow:0 18px 44px rgba(7,75,47,.10)}.real-stories-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.real-story-card{min-height:338px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:linear-gradient(180deg,#003824 0%,#002c1d 100%);color:#fff;padding:22px 20px 18px;display:flex;flex-direction:column;box-shadow:0 10px 24px rgba(7,75,47,.12);position:relative;overflow:hidden}.real-story-quote-mark{font-size:44px;line-height:.7;color:#7ecb31;font-weight:950;margin-bottom:14px}.real-story-quote{margin:0;color:#f7fbf8;font-size:13px;line-height:1.65;flex:1}.real-story-quote em{font-style:normal;color:#fff}.real-story-footer{display:flex;align-items:flex-end;gap:12px;margin-top:18px}.real-story-photo{width:74px;height:74px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.72);flex:0 0 74px;background:#184d37}.real-story-meta{min-width:0}.real-story-name{margin:0;color:#7ecb31;font-size:13px;line-height:1.2;font-weight:950;letter-spacing:.25px}.real-story-from{margin-top:4px;color:#fff;font-size:12px;line-height:1.25}.real-story-stars{margin-top:7px;color:#ffc400;font-size:18px;letter-spacing:1px;line-height:1}@media(max-width:900px){#real-stories{padding:62px 0 70px}.real-stories-grid{grid-template-columns:1fr;gap:14px}.real-story-card{min-height:0}}@media(max-width:600px){#real-stories{padding:50px 0 58px}.real-stories-heading h2{font-size:40px;letter-spacing:-2.2px}.real-stories-shell{padding:10px;border-radius:22px}.real-story-card{padding:20px 17px 16px;border-radius:16px}.real-story-quote{font-size:12px;line-height:1.58}}`; document.head.appendChild(style); }
+    const section=document.createElement('section'); section.id='real-stories'; section.innerHTML=`<div class="wrap"><div class="real-stories-heading"><span class="real-stories-eyebrow">REAL STORIES</span><h2>Real people. Real experiences.</h2><p>Inspiring stories from OFWs around the world.</p></div><div class="real-stories-shell"><div class="real-stories-grid"><article class="real-story-card"><div class="real-story-quote-mark">“</div><p class="real-story-quote">Hindi ko akalain na ang isang desisyon na gawin ang negosyo ng Santé Barley, ang magbibigay saakin ng magandang income bukod sa Salary ko dito sa Dubai, <em>“Always give your self and your dreams a chance”</em><br><br>sa mga kapwa ko OFW kayang kaya nyo din ito.</p><div class="real-story-footer"><img class="real-story-photo" src="assets/images/Real Story Final.png" alt="Sally OFW"><div class="real-story-meta"><p class="real-story-name">-SALLY OFW</p><div class="real-story-from">from U.A.E</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div></div></article><article class="real-story-card"><div class="real-story-quote-mark">“</div><p class="real-story-quote">Hindi naman ako naghahanap ng malaking pera. <em>“Ang gusto ko lang noon ay magkaroon ng ibang option. Nag-start ako by learning first and understanding how the business works. Hindi naging overnight ang results, pero at least may sinimulan akong buuin para sa future ko.”</em></p><div class="real-story-footer"><img class="real-story-photo" src="assets/images/Real Story Final.png" alt="Althea OFW"><div class="real-story-meta"><p class="real-story-name">-ALTHEA OFW</p><div class="real-story-from">from Singapore</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div></div></article><article class="real-story-card"><div class="real-story-quote-mark">“</div><p class="real-story-quote">Akala ko kailangan kong hintayin munang makauwi bago ako magsimula! <em>“OFW ako at dati, ang focus ko lang talaga ay kumita para sa pamilya. Pero habang tumatagal, naisip ko rin, paano naman kapag dumating yung panahon na gusto ko nang umuwi? Kaya nagsimula akong mag-explore ng opportunity na pwede kong matutunan habang nagtatrabaho pa ako abroad.”</em></p><div class="real-story-footer"><img class="real-story-photo" src="assets/images/Real Story Final.png" alt="Susan OFW"><div class="real-story-meta"><p class="real-story-name">-SUSAN OFW</p><div class="real-story-from">from Hongkong</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div></div></article></div></div></div>`;
+    anchor.insertAdjacentElement('afterend',section);
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { init(); addRealStoriesSection(); });
-  } else {
-    init();
-    addRealStoriesSection();
-  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){init();addRealStoriesSection();}); else {init();addRealStoriesSection();}
 })();
