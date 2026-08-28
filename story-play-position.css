@@ -29,7 +29,7 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
 .hero-why { transition:border-color .18s ease, transform .18s ease; }
 .hero-why:hover { border-color:#9fc9b0 !important; transform:translateY(-2px); }
 .stats-strip { padding:22px 0 24px !important; }
-.stats-card,.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.stat-card,.why-card,.product-card,.more-than-card,.three-simple-step-card,.discount-card,.inquiry-form-card { transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .stat-card:hover,.why-card:hover,.product-card:hover,.more-than-card:hover,.three-simple-step-card:hover,.discount-card:hover { transform:translateY(-3px); border-color:#c4dacf; box-shadow:0 18px 38px rgba(7,75,47,.10); }
 .stats-strip::before { content:"Global wellness community  •  Founded 2007  •  International reach  •  Quality-focused products"; display:block; width:min(1320px,100%); margin:0 auto 14px; padding:0 24px; color:#52605a; text-align:center; font-size:10px; line-height:1.4; letter-spacing:.55px; font-weight:800; }
 .why-section,.products-section,.barley-wellness-section,.simple-grain-section,.discount-section,.more-than-section,.three-simple-steps-section,.stories-section,.barley-feature-section,.inquiry-section { scroll-margin-top:92px; }
@@ -85,10 +85,22 @@ body { overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:opt
   .products-section { padding:54px 0 64px !important; }
   .barley-wellness-section,.simple-grain-section,.barley-feature-section { padding-top:52px !important; padding-bottom:62px !important; }
   .stories-section { padding:52px 0 62px !important; }
-  .help-chat-widget { right:14px !important; bottom:14px !important; }
-  .help-chat-toggle { min-height:46px !important; }
 }
 
 /* Keep the mobile navigation menu hidden on desktop; show it only when opened on mobile. */
 .mobile-nav-menu { display:none !important; }
 @media(max-width:900px){ .mobile-nav-menu.is-open { display:grid !important; } }
+
+/* Premium global chat: compact, helpful, brand-consistent, never intrusive. */
+.help-chat-widget { right:22px !important; bottom:20px !important; z-index:950 !important; }
+.help-chat-toggle { position:relative !important; min-height:50px !important; padding:0 19px 0 16px !important; border:1px solid rgba(255,255,255,.18) !important; border-radius:999px !important; background:#087f45 !important; color:#fff !important; box-shadow:0 12px 30px rgba(7,75,47,.22) !important; display:inline-flex !important; align-items:center !important; gap:9px !important; font-size:13px !important; letter-spacing:.1px !important; transition:transform .18s ease,box-shadow .18s ease,background .18s ease !important; }
+.help-chat-toggle::before { content:''; width:9px; height:9px; border-radius:50%; background:#b8e86c; box-shadow:0 0 0 4px rgba(184,232,108,.14); flex:0 0 9px; }
+.help-chat-toggle:hover { background:#066b3b !important; transform:translateY(-2px) !important; box-shadow:0 16px 34px rgba(7,75,47,.26) !important; }
+.help-chat-panel { width:306px !important; margin-bottom:11px !important; padding:10px !important; border:1px solid #dce9e1 !important; border-radius:20px !important; background:rgba(255,255,255,.98) !important; box-shadow:0 22px 55px rgba(7,75,47,.18) !important; backdrop-filter:blur(10px) !important; }
+.help-chat-title { position:relative !important; padding:12px 11px 13px 38px !important; font-size:15px !important; letter-spacing:-.15px !important; }
+.help-chat-title::before { content:'✓'; position:absolute; left:9px; top:10px; width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; background:#e7f6e9; color:#087f45; font-size:12px; font-weight:950; }
+.help-chat-options { gap:7px !important; }
+.help-chat-option { border:1px solid #e1ebe5 !important; border-radius:12px !important; background:#fbfdfb !important; padding:11px 12px !important; font-size:12px !important; font-weight:850 !important; transition:transform .16s ease,border-color .16s ease,background .16s ease !important; }
+.help-chat-option:hover { background:#f1f8f3 !important; border-color:#cfe1d5 !important; transform:translateY(-1px) !important; }
+.leslie-contact-option { border-color:#e1ebe5 !important; border-radius:12px !important; }
+@media(max-width:600px){ .help-chat-widget { right:14px !important; bottom:14px !important; } .help-chat-toggle { min-height:46px !important; padding:0 16px 0 14px !important; font-size:12px !important; } .help-chat-panel { width:min(306px,calc(100vw - 28px)) !important; border-radius:18px !important; } }
