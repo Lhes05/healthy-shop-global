@@ -80,7 +80,7 @@
               <div class="real-story-quote-mark">“</div>
               <p class="real-story-quote">Hindi ko akalain na ang isang desisyon na gawin ang negosyo ng Santé Barley, ang magbibigay saakin ng magandang income bukod sa Salary ko dito sa Dubai, <em>“Always give your self and your dreams a chance”</em><br><br>sa mga kapwa ko OFW kayang kaya nyo din ito.</p>
               <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/480199035_1059371792873125_7230515317833385402_n.jpg" alt="Sally OFW" onerror="this.onerror=null;this.src='assets/images/STORY 1.png'">
+                <img class="real-story-photo" src="assets/images/real story 1.png" alt="Sally OFW">
                 <div class="real-story-meta"><p class="real-story-name">-SALLY OFW</p><div class="real-story-from">from U.A.E</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
               </div>
             </article>
@@ -88,7 +88,7 @@
               <div class="real-story-quote-mark">“</div>
               <p class="real-story-quote">Hindi naman ako naghahanap ng malaking pera. <em>“Ang gusto ko lang noon ay magkaroon ng ibang option. Nag-start ako by learning first and understanding how the business works. Hindi naging overnight ang results, pero at least may sinimulan akong buuin para sa future ko.”</em></p>
               <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/481012072_1069149695228668_1468989766360246058_n.jpg" alt="Althea OFW" onerror="this.onerror=null;this.src='assets/images/STORY 4.png'">
+                <img class="real-story-photo" src="assets/images/real story 2.png" alt="Althea OFW">
                 <div class="real-story-meta"><p class="real-story-name">-ALTHEA OFW</p><div class="real-story-from">from Singapore</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
               </div>
             </article>
@@ -96,7 +96,7 @@
               <div class="real-story-quote-mark">“</div>
               <p class="real-story-quote">Akala ko kailangan kong hintayin munang makauwi bago ako magsimula! <em>“OFW ako at dati, ang focus ko lang talaga ay kumita para sa pamilya. Pero habang tumatagal, naisip ko rin, paano naman kapag dumating yung panahon na gusto ko nang umuwi? Kaya nagsimula akong mag-explore ng opportunity na pwede kong matutunan habang nagtatrabaho pa ako abroad.”</em></p>
               <div class="real-story-footer">
-                <img class="real-story-photo" src="assets/images/488253026_683836637495552_5919797592616001891_n.jpg" alt="Susan OFW" onerror="this.onerror=null;this.src='assets/images/STORY 3.png'">
+                <img class="real-story-photo" src="assets/images/real story 3.png" alt="Susan OFW">
                 <div class="real-story-meta"><p class="real-story-name">-SUSAN OFW</p><div class="real-story-from">from Hongkong</div><div class="real-story-stars" aria-label="5 out of 5 stars">★★★★★</div></div>
               </div>
             </article>
