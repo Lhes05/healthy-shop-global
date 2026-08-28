@@ -17,3 +17,12 @@
     transform: translateY(88px) !important;
   }
 }
+
+/* Remove the unused top navigation links without changing page sections. */
+header a[href="#why-sante"],
+header a[href="#products"],
+header a[href="#business"],
+header a[href="#wellness"],
+header a[href="#barley"] {
+  display: none !important;
+}
