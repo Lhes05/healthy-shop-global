@@ -1,0 +1,48 @@
+name: Remove Product Guide Section
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  remove-product-guide:
+    if: github.event.head_commit.message != 'Remove Product guide section'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove Product guide section and this one-time workflow
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          updated, count = re.subn(
+              r'<section id="products">.*?</section>',
+              '',
+              html,
+              count=1,
+              flags=re.S,
+          )
+          if count == 0:
+              raise SystemExit('Product guide section was not found')
+          path.write_text(updated, encoding='utf-8')
+
+          workflow = Path('.github/workflows/remove-product-guide.yml')
+          workflow.unlink(missing_ok=True)
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html .github/workflows/remove-product-guide.yml
+          git commit -m 'Remove Product guide section'
+          git push
