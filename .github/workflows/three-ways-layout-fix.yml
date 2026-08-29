@@ -24,8 +24,6 @@ jobs:
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
 
-          # Remove any previous version of the Three Ways section, then place it
-          # immediately after the Yannah / Santé Barley feature section.
           three_re = re.compile(r'<section id="how-it-works"[\s\S]*?</section>\s*', re.I)
           barley_re = re.compile(r'<section id="barley-feature"[\s\S]*?</section>', re.I)
           three_match = three_re.search(text)
@@ -41,9 +39,6 @@ jobs:
           insert_at = barley_match.end()
           text = text[:insert_at] + '\n' + three_block + '\n' + text[insert_at:]
 
-          # Add a dedicated layout override so the section is visually smaller,
-          # tighter and balanced directly beneath the Barley feature.
-          marker = '<style id="three-ways-layout-fix">'
           text = re.sub(r'<style id="three-ways-layout-fix">[\s\S]*?</style>\s*', '', text, flags=re.I)
           css = '''<style id="three-ways-layout-fix">
           #how-it-works{background:#f5fbf7;color:#102018;padding:52px 0 62px;scroll-margin-top:76px}
@@ -63,7 +58,6 @@ jobs:
           </style>'''
           text = text.replace('</head>', css + '\n</head>', 1)
           path.write_text(text, encoding='utf-8')
-          print('Three Ways section placed directly after Yannah / Santé Barley and spacing refined.')
 
       - name: Commit and push
         run: |
@@ -72,7 +66,8 @@ jobs:
           git add index.html
           if git diff --cached --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "Fix Three Ways layout"
-            git push
+            exit 0
           fi
+          git commit -m "Fix Three Ways layout"
+          git pull --rebase origin main
+          git push origin HEAD:main
