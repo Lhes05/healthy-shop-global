@@ -1,5 +1,27 @@
 /* Santé Everyday Wellness — clean section + chat interactions */
 (function () {
+  function removeStrayMarkupCharacters() {
+    // Remove accidental literal backslashes / escaped-newline artifacts that were
+    // inserted into the HTML and can appear as stray characters around the page.
+    function clean(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      let node;
+      while ((node = walker.nextNode())) nodes.push(node);
+      nodes.forEach(function (textNode) {
+        if (!textNode.parentElement) return;
+        const value = textNode.nodeValue || '';
+        const cleaned = value
+          .replace(/^[\s\\]+(?=\n|$)/g, '')
+          .replace(/\\(?=\s*(?:<|$))/g, '')
+          .replace(/^\\\s*$/gm, '')
+          .replace(/\\\n/g, '\n');
+        if (cleaned !== value) textNode.nodeValue = cleaned;
+      });
+    }
+    clean(document.body);
+  }
+
   function initChat() {
     const panel = document.getElementById('helpChatPanel');
     const options = panel && panel.querySelector('.help-chat-options');
@@ -132,11 +154,13 @@
   }
 
   function start() {
+    removeStrayMarkupCharacters();
     initChat();
     addCleanStories();
     addOpportunity();
     wireBusiness();
     openExternalButtonsInNewTabs();
+    removeStrayMarkupCharacters();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
