@@ -25,6 +25,17 @@
     }, true);
   }
 
+  function openExternalButtonsInNewTabs() {
+    // Keep every official/external CTA easy to return from: open it in a new tab.
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      const href = link.getAttribute('href') || '';
+      if (/^https?:\/\//i.test(href)) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  }
+
   function addCleanStories() {
     if (document.getElementById('real-stories')) return;
     const anchor = document.getElementById('three-simple-steps');
@@ -120,6 +131,12 @@
     });
   }
 
-  function start() { initChat(); addCleanStories(); addOpportunity(); wireBusiness(); }
+  function start() {
+    initChat();
+    addCleanStories();
+    addOpportunity();
+    wireBusiness();
+    openExternalButtonsInNewTabs();
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
