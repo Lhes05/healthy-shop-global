@@ -1,0 +1,78 @@
+name: Fix Three Ways layout
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-layout:
+    if: ${{ github.event.head_commit.message != 'Fix Three Ways layout' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Move section and refine spacing
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          # Remove any previous version of the Three Ways section, then place it
+          # immediately after the Yannah / Santé Barley feature section.
+          three_re = re.compile(r'<section id="how-it-works"[\s\S]*?</section>\s*', re.I)
+          barley_re = re.compile(r'<section id="barley-feature"[\s\S]*?</section>', re.I)
+          three_match = three_re.search(text)
+          barley_match = barley_re.search(text)
+          if not three_match:
+              raise SystemExit('Three Ways section not found')
+          if not barley_match:
+              raise SystemExit('Yannah / Santé Barley section not found')
+
+          three_block = three_match.group(0).strip()
+          text = text[:three_match.start()] + text[three_match.end():]
+          barley_match = barley_re.search(text)
+          insert_at = barley_match.end()
+          text = text[:insert_at] + '\n' + three_block + '\n' + text[insert_at:]
+
+          # Add a dedicated layout override so the section is visually smaller,
+          # tighter and balanced directly beneath the Barley feature.
+          marker = '<style id="three-ways-layout-fix">'
+          text = re.sub(r'<style id="three-ways-layout-fix">[\s\S]*?</style>\s*', '', text, flags=re.I)
+          css = '''<style id="three-ways-layout-fix">
+          #how-it-works{background:#f5fbf7;color:#102018;padding:52px 0 62px;scroll-margin-top:76px}
+          #how-it-works .sc-wrap{width:min(1180px,calc(100% - 40px));margin:0 auto}
+          #how-it-works .sc-kicker{display:inline-block;margin-bottom:12px;font-size:11px;letter-spacing:1.7px}
+          #how-it-works .sc-title{font-size:clamp(36px,4.2vw,56px);line-height:1.02;letter-spacing:-2.7px;margin:0 0 12px}
+          #how-it-works .sc-lead{max-width:720px;font-size:15px;line-height:1.55;margin:0}
+          #how-it-works .sc-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}
+          #how-it-works .sc-card{min-height:190px;padding:20px 18px;border-radius:18px;box-shadow:0 10px 24px rgba(7,75,47,.06)}
+          #how-it-works .sc-num{width:34px;height:34px;border-radius:10px;margin-bottom:13px}
+          #how-it-works .sc-card h3{font-size:17px;margin:0 0 7px}
+          #how-it-works .sc-card p{font-size:12px;line-height:1.5}
+          #how-it-works .sc-cta-row{margin-top:18px;gap:10px}
+          #how-it-works .sc-btn{min-height:44px;padding:0 18px;font-size:12px}
+          @media(max-width:800px){#how-it-works{padding:44px 0 54px}#how-it-works .sc-grid{grid-template-columns:1fr;gap:12px}#how-it-works .sc-card{min-height:auto}}
+          @media(max-width:500px){#how-it-works .sc-wrap{width:calc(100% - 28px)}#how-it-works .sc-title{font-size:38px;letter-spacing:-2px}}
+          </style>'''
+          text = text.replace('</head>', css + '\n</head>', 1)
+          path.write_text(text, encoding='utf-8')
+          print('Three Ways section placed directly after Yannah / Santé Barley and spacing refined.')
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Fix Three Ways layout"
+            git push
+          fi
