@@ -63,7 +63,7 @@ jobs:
           if git diff --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           git add chat-menu-keep-options.js index.html
           git commit -m "Fix inquiry form and cleanup homepage"
-          git pull --rebase origin main
           git push origin HEAD:main
