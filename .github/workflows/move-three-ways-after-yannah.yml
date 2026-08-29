@@ -1,0 +1,90 @@
+name: Move Three Ways section
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  move-section:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Move Three clear ways section after Yannah section
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          # Find top-level <section>...</section> blocks using a small depth-aware scanner.
+          tag_re = re.compile(r'</?section\b[^>]*>', re.I)
+          blocks = []
+          stack = []
+          for m in tag_re.finditer(text):
+              tag = m.group(0)
+              if tag.startswith('</'):
+                  if stack:
+                      start = stack.pop()
+                      if not stack:
+                          blocks.append((start, m.end(), text[start:m.end()]))
+              else:
+                  if not stack:
+                      stack.append(m.start())
+                  else:
+                      stack.append(m.start())
+
+          if not blocks:
+              raise SystemExit('No section blocks found')
+
+          move = None
+          target = None
+          for start, end, block in blocks:
+              if 'Three clear ways to begin.' in block:
+                  move = (start, end, block)
+              if 'YANNAH ESTRADA' in block and 'Santé Barley' in block:
+                  target = (start, end, block)
+
+          if not move:
+              raise SystemExit('Three clear ways section not found')
+          if not target:
+              raise SystemExit('Yannah / Santé Barley target section not found')
+          if move[:2] == target[:2]:
+              raise SystemExit('Move and target sections are the same')
+
+          ms, me, mb = move
+          ts, te, tb = target
+
+          # Remove the source section, then insert it immediately after the target section.
+          without = text[:ms] + text[me:]
+          shift = me - ms
+          if ms < ts:
+              te2 = te - shift
+          else:
+              te2 = te
+
+          updated = without[:te2] + '\n' + mb + '\n' + without[te2:]
+          if updated == text:
+              raise SystemExit('No change made')
+          path.write_text(updated, encoding='utf-8')
+          print('Moved Three clear ways section after Yannah / Santé Barley section')
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Move Three Ways section after Yannah Barley"
+            git push
+          fi
