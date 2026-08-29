@@ -1,0 +1,45 @@
+name: Remove unwanted complete sections
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove requested sections
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          original = s
+
+          # Remove only the sections inside the generated SANTE complete layer.
+          for section_id in ('about-sante', 'products', 'faq'):
+              pattern = rf'\\n<section id="{section_id}">.*?</section>\\n'
+              s = re.sub(pattern, '\\n', s, count=1, flags=re.S)
+
+          if s == original:
+              raise SystemExit(0)
+
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Remove unwanted About, Product Guide and FAQ sections"
+          git push
