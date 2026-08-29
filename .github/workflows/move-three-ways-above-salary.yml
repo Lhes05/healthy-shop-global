@@ -19,28 +19,26 @@ jobs:
           import re
           p = Path('index.html')
           text = p.read_text(encoding='utf-8')
-          three = re.compile(r'<section id="how-it-works"[\\s\\S]*?</section>\\s*', re.I)
+          three = re.compile(r'<section id="how-it-works"[\s\S]*?</section>\s*', re.I)
           m = three.search(text)
           if not m:
               raise SystemExit('Three Ways section not found')
           block = m.group(0).strip()
           text = text[:m.start()] + text[m.end():]
-          # Find the section whose visible text contains the requested salary heading.
-          sections = list(re.finditer(r'<section\\b[^>]*>[\\s\\S]*?</section>', text, re.I))
+          sections = list(re.finditer(r'<section\b[^>]*>[\s\S]*?</section>', text, re.I))
           target = None
           for s in sections:
-              if re.search(r'DO\\s+YOU\\s+HAVE\\s+ANY\\s+OTHER\\s+OPTION\\s+BESIDES\\s+YOUR\\s+SALARY', s.group(0), re.I):
+              if re.search(r'DO\s+YOU\s+HAVE\s+ANY\s+OTHER\s+OPTION\s+BESIDES\s+YOUR\s+SALARY', s.group(0), re.I):
                   target = s
                   break
           if not target:
-              # Fallback: locate the heading text anywhere and use its enclosing section.
-              pos = re.search(r'DO\\s+YOU\\s+HAVE\\s+ANY\\s+OTHER\\s+OPTION\\s+BESIDES\\s+YOUR\\s+SALARY', text, re.I)
+              pos = re.search(r'DO\s+YOU\s+HAVE\s+ANY\s+OTHER\s+OPTION\s+BESIDES\s+YOUR\s+SALARY', text, re.I)
               if not pos:
                   raise SystemExit('Salary section heading not found')
               target = next((s for s in sections if s.start() <= pos.start() < s.end()), None)
           if not target:
               raise SystemExit('Salary section container not found')
-          text = text[:target.start()] + block + '\\n' + text[target.start():]
+          text = text[:target.start()] + block + '\n' + text[target.start():]
           p.write_text(text, encoding='utf-8')
           print('Three Ways moved directly above the salary section.')
       - name: Commit and push
