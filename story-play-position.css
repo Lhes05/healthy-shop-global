@@ -47,3 +47,18 @@ body > * { text-indent: 0; }
 #how-it-works .sc-btn{min-height:40px;padding:0 16px;font-size:11px}
 @media(max-width:900px){#how-it-works{padding:36px 0 44px}#how-it-works .sc-grid{grid-template-columns:1fr;gap:10px}#how-it-works .sc-card{min-height:auto}}
 @media(max-width:500px){#how-it-works .sc-wrap{width:calc(100% - 28px)}#how-it-works .sc-title{font-size:34px;letter-spacing:-1.8px}#how-it-works .sc-lead{font-size:13px}#how-it-works .sc-card{padding:15px 14px}#how-it-works .sc-btn{width:100%}}
+
+/* Final desktop layout guard: keep Three clear ways to begin as three compact cards. */
+#how-it-works .sc-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:12px !important;
+}
+#how-it-works .sc-card{
+  width:auto !important;
+  min-height:168px !important;
+}
+@media(max-width:900px){
+  #how-it-works .sc-grid{grid-template-columns:1fr !important;}
+  #how-it-works .sc-card{width:100% !important;min-height:auto !important;}
+}
