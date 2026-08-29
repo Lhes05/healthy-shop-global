@@ -12,9 +12,9 @@
         if (!textNode.parentElement) return;
         const value = textNode.nodeValue || '';
         const cleaned = value
-          .replace(/^[\s\\]+(?=\n|$)/g, '')
+          .replace(/(?:\\n)+/g, '')
           .replace(/\\(?=\s*(?:<|$))/g, '')
-          .replace(/^\\\s*$/gm, '')
+          .replace(/^[\s\\]+(?=\n|$)/g, '')
           .replace(/\\\n/g, '\n');
         if (cleaned !== value) textNode.nodeValue = cleaned;
       });
