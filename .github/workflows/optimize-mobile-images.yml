@@ -29,35 +29,42 @@ jobs:
 
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
+          target = 'assets/images/product-barley-canister.png'
           tags = list(re.finditer(r'<img\b[^>]*>', s, flags=re.I))
           if not tags:
               raise SystemExit('No img elements found')
 
-          first_src_match = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', tags[0].group(0), re.I)
-          first_src = first_src_match.group(1) if first_src_match else None
+          target_index = None
+          for i, m in enumerate(tags):
+              src_m = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', m.group(0), re.I)
+              if src_m and src_m.group(1) == target:
+                  target_index = i
+                  break
+          if target_index is None:
+              raise SystemExit(f'Hero image not found: {target}')
 
           def clean_attr(tag: str, name: str) -> str:
               return re.sub(r'\s' + name + r'\s*=\s*["\'][^"\']*["\']', '', tag, flags=re.I)
 
-          def optimize(match_index: int, tag: str) -> str:
-              for attr in ('loading', 'fetchpriority', 'decoding'):
-                  tag = clean_attr(tag, attr)
-              if match_index == 0:
-                  return tag[:-1] + ' loading="eager" fetchpriority="high" decoding="async">'
-              return tag[:-1] + ' loading="lazy" decoding="async">'
-
           pieces, cursor = [], 0
           for i, m in enumerate(tags):
               pieces.append(s[cursor:m.start()])
-              pieces.append(optimize(i, m.group(0)))
+              tag = m.group(0)
+              for attr in ('loading', 'fetchpriority', 'decoding'):
+                  tag = clean_attr(tag, attr)
+              if i == target_index:
+                  tag = tag[:-1] + ' loading="eager" fetchpriority="high" decoding="async">'
+              else:
+                  tag = tag[:-1] + ' loading="lazy" decoding="async">'
+              pieces.append(tag)
               cursor = m.end()
           pieces.append(s[cursor:])
           s = ''.join(pieces)
 
-          if first_src and not re.search(r'<link[^>]+rel=["\']preload["\'][^>]+as=["\']image["\']', s, flags=re.I):
-              preload = f'<link rel="preload" as="image" href="{first_src}" fetchpriority="high">'
-              marker = '<link rel="stylesheet" href="style.css?v=27">'
+          s = re.sub(r'\s*<link\s+rel=["\']preload["\'][^>]*as=["\']image["\'][^>]*>', '', s, flags=re.I)
+          preload = f'<link rel="preload" as="image" href="{target}" fetchpriority="high">'
+          marker = '<link rel="stylesheet" href="style.css?v=27">'
+          if preload not in s and marker in s:
               s = s.replace(marker, preload + '\n  ' + marker, 1)
 
           p.write_text(s, encoding='utf-8')
@@ -65,8 +72,10 @@ jobs:
 
       - name: Verify changes
         run: |
+          grep -q 'assets/images/product-barley-canister.png' index.html
           grep -q 'loading="eager" fetchpriority="high"' index.html
           grep -q 'loading="lazy"' index.html
+          grep -q '<link rel="preload" as="image" href="assets/images/product-barley-canister.png" fetchpriority="high">' index.html
 
       - name: Commit and push with rebase retry
         shell: bash
