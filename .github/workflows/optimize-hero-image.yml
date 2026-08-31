@@ -68,7 +68,7 @@ jobs:
           print(f'Created {out}: {out.stat().st_size} bytes ({img.width}x{img.height})')
           PY
 
-      - name: Verify
+      - name: Verify optimized output
         run: |
           test -s assets/images/product-barley-canister.webp
           grep -q 'product-barley-canister.webp' index.html
@@ -81,6 +81,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/images/product-barley-canister.webp index.html
+          if git diff --cached --quiet; then
+            echo "No optimization changes to commit."
+            exit 0
+          fi
           git commit -m "Optimize hero image for mobile LCP [skip ci]"
           git push origin HEAD:main
 
@@ -90,3 +94,5 @@ jobs:
           git rm .github/workflows/optimize-hero-image.yml
           git commit -m "Remove one-time hero optimizer [skip ci]"
           git push origin HEAD:main
+
+# retrigger-2026-08-31
