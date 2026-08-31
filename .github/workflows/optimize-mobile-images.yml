@@ -27,35 +27,36 @@ jobs:
 
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          hero = 'assets/images/product-barley-canister.png'
-          hero_seen = False
 
-          def repl(m):
-              nonlocal_dummy = None
-              global hero_seen
-              tag = m.group(0)
-              src_m = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', tag, re.I)
-              if not src_m:
-                  return tag
-              src = src_m.group(1)
-              is_hero = src == hero and not hero_seen
-              if is_hero:
-                  hero_seen = True
-                  for attr in ('loading', 'fetchpriority', 'decoding'):
-                      tag = re.sub(r'\s' + attr + r'\s*=\s*["\'][^"\']*["\']', '', tag, flags=re.I)
+          tags = list(re.finditer(r'<img\b[^>]*>', s, flags=re.I))
+          if not tags:
+              raise SystemExit('No img elements found')
+
+          first_src_match = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', tags[0].group(0), re.I)
+          first_src = first_src_match.group(1) if first_src_match else None
+
+          def clean_attr(tag: str, name: str) -> str:
+              return re.sub(r'\s' + name + r'\s*=\s*["\'][^"\']*["\']', '', tag, flags=re.I)
+
+          def optimize(match_index: int, tag: str) -> str:
+              tag = clean_attr(tag, 'loading')
+              tag = clean_attr(tag, 'fetchpriority')
+              tag = clean_attr(tag, 'decoding')
+              if match_index == 0:
                   return tag[:-1] + ' loading="eager" fetchpriority="high" decoding="async">'
-              if re.search(r'\sloading\s*=', tag, re.I):
-                  tag = re.sub(r'(\sloading\s*=\s*["\'])[^"\']*(["\'])', r'\1lazy\2', tag, count=1, flags=re.I)
-              else:
-                  tag = tag[:-1] + ' loading="lazy">'
-              if not re.search(r'\sdecoding\s*=', tag, re.I):
-                  tag = tag[:-1] + ' decoding="async">'
-              return tag
+              return tag[:-1] + ' loading="lazy" decoding="async">'
 
-          s = re.sub(r'<img\b[^>]*>', repl, s, flags=re.I)
+          pieces = []
+          cursor = 0
+          for i, m in enumerate(tags):
+              pieces.append(s[cursor:m.start()])
+              pieces.append(optimize(i, m.group(0)))
+              cursor = m.end()
+          pieces.append(s[cursor:])
+          s = ''.join(pieces)
 
-          preload = f'<link rel="preload" as="image" href="{hero}" fetchpriority="high">'
-          if preload not in s:
+          if first_src and not re.search(r'<link[^>]+rel=["\']preload["\'][^>]+as=["\']image["\'][^>]+', s, flags=re.I):
+              preload = f'<link rel="preload" as="image" href="{first_src}" fetchpriority="high">'
               marker = '<link rel="stylesheet" href="style.css?v=27">'
               s = s.replace(marker, preload + '\n  ' + marker, 1)
 
@@ -64,10 +65,10 @@ jobs:
 
       - name: Verify changes
         run: |
-          test "$(grep -o 'loading=\"lazy\"' index.html | wc -l)" -ge 1
-          grep -q 'fetchpriority="high"' index.html
+          grep -q 'loading="eager" fetchpriority="high"' index.html
+          grep -q 'loading="lazy"' index.html
 
-      - name: Commit optimization and remove temporary workflow
+      - name: Commit optimization and remove workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
