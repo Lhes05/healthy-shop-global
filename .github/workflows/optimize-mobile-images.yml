@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Optimize image loading metadata
         shell: bash
@@ -39,15 +41,13 @@ jobs:
               return re.sub(r'\s' + name + r'\s*=\s*["\'][^"\']*["\']', '', tag, flags=re.I)
 
           def optimize(match_index: int, tag: str) -> str:
-              tag = clean_attr(tag, 'loading')
-              tag = clean_attr(tag, 'fetchpriority')
-              tag = clean_attr(tag, 'decoding')
+              for attr in ('loading', 'fetchpriority', 'decoding'):
+                  tag = clean_attr(tag, attr)
               if match_index == 0:
                   return tag[:-1] + ' loading="eager" fetchpriority="high" decoding="async">'
               return tag[:-1] + ' loading="lazy" decoding="async">'
 
-          pieces = []
-          cursor = 0
+          pieces, cursor = [], 0
           for i, m in enumerate(tags):
               pieces.append(s[cursor:m.start()])
               pieces.append(optimize(i, m.group(0)))
@@ -55,7 +55,7 @@ jobs:
           pieces.append(s[cursor:])
           s = ''.join(pieces)
 
-          if first_src and not re.search(r'<link[^>]+rel=["\']preload["\'][^>]+as=["\']image["\'][^>]+', s, flags=re.I):
+          if first_src and not re.search(r'<link[^>]+rel=["\']preload["\'][^>]+as=["\']image["\']', s, flags=re.I):
               preload = f'<link rel="preload" as="image" href="{first_src}" fetchpriority="high">'
               marker = '<link rel="stylesheet" href="style.css?v=27">'
               s = s.replace(marker, preload + '\n  ' + marker, 1)
@@ -68,11 +68,19 @@ jobs:
           grep -q 'loading="eager" fetchpriority="high"' index.html
           grep -q 'loading="lazy"' index.html
 
-      - name: Commit optimization and remove workflow
+      - name: Commit and push with rebase retry
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git rm .github/workflows/optimize-mobile-images.yml
-          git commit -m "Optimize mobile image loading [skip ci]"
-          git push
+          git commit -m "Optimize mobile image loading [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo "Could not push after 5 attempts" >&2
+          exit 1
