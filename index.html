@@ -212,5 +212,30 @@
     <a href="./" aria-current="page">English</a>
     <a href="./ph/" title="Filipino version">Filipino</a>
   </div>
+
+  <script>
+    /* CHAT MENU RESET STATE */
+    (function(){
+      const toggle=document.getElementById('helpChatToggle');
+      const options=document.querySelector('#helpChatPanel .help-chat-options');
+      const details=document.getElementById('helpOrderDetails');
+      if(!toggle||!options)return;
+      function resetMenu(){
+        options.style.display='grid';
+        if(details){
+          details.classList.remove('is-open');
+          details.setAttribute('aria-hidden','true');
+        }
+      }
+      toggle.addEventListener('click',function(){
+        if(toggle.getAttribute('aria-expanded') === 'true'){
+          resetMenu();
+        }
+      });
+      document.addEventListener('keydown',function(e){
+        if(e.key==='Escape') resetMenu();
+      });
+    })();
+  </script>
 </body>
 </html>
