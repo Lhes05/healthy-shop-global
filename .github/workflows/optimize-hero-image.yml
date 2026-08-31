@@ -1,0 +1,67 @@
+name: Optimize hero image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/optimize-hero-image.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create optimized WebP hero
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Path('assets/images/product-barley-canister.png')
+          out = Path('assets/images/product-barley-canister.webp')
+          img = Image.open(src).convert('RGB')
+          max_width = 720
+          if img.width > max_width:
+              new_h = round(img.height * max_width / img.width)
+              img = img.resize((max_width, new_h), Image.Resampling.LANCZOS)
+          img.save(out, 'WEBP', quality=82, method=6)
+          print(f'Created {out}: {out.stat().st_size} bytes')
+          PY
+
+      - name: Switch hero to optimized WebP
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('assets/images/product-barley-canister.png', 'assets/images/product-barley-canister.webp')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Verify
+        run: |
+          test -s assets/images/product-barley-canister.webp
+          grep -q 'product-barley-canister.webp' index.html
+
+      - name: Commit and push
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images/product-barley-canister.webp index.html
+          git commit -m "Optimize hero image for mobile LCP [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          exit 1
