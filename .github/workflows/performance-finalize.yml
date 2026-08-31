@@ -1,0 +1,116 @@
+name: Finalize performance and SEO
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/performance-finalize.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Optimize hero and clean duplicate head/scripts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Create a compact WebP hero from the existing source image.
+          src = Path('assets/images/product-barley-canister.png')
+          out = Path('assets/images/product-barley-canister.webp')
+          if src.exists():
+              img = Image.open(src).convert('RGB')
+              max_width = 720
+              if img.width > max_width:
+                  h = round(img.height * max_width / img.width)
+                  img = img.resize((max_width, h), Image.Resampling.LANCZOS)
+              out.parent.mkdir(parents=True, exist_ok=True)
+              img.save(out, 'WEBP', quality=82, method=6)
+              hero_w, hero_h = img.size
+          else:
+              raise SystemExit('Hero source image missing')
+
+          # Use the optimized hero everywhere, but preserve the original PNG as a fallback only where JS explicitly needs it.
+          s = s.replace('assets/images/product-barley-canister.png', 'assets/images/product-barley-canister.webp')
+
+          # Remove duplicate SEO/meta/OG/JSON-LD block introduced by the SANTE-GLOBAL-LAYER.
+          start = s.find('<!-- SANTE-GLOBAL-LAYER -->')
+          if start != -1:
+              end = s.find('<style id="three-ways-layout-fix">', start)
+              if end != -1:
+                  s = s[:start] + s[end:]
+
+          # Remove duplicate Leslie chat script; keep the newest v=2 reference.
+          s = s.replace('  <script src="leslie-chat.js?v=1"></script>\n', '')
+
+          # Keep one language switcher: remove the later architecture duplicate.
+          marker = '  <!-- SANTE-LANGUAGE-ARCHITECTURE -->'
+          start = s.find(marker)
+          if start != -1:
+              end = s.find('  <script>', start)
+              if end != -1:
+                  s = s[:start] + s[end:]
+
+          # Make the actual hero image the only eager/high-priority hero and reserve its layout space.
+          pattern = re.compile(r'<img\\b[^>]*src=["\']assets/images/product-barley-canister\\.webp["\'][^>]*>', re.I)
+          m = pattern.search(s)
+          if not m:
+              raise SystemExit('Optimized hero image tag not found')
+          tag = m.group(0)
+          for attr in ('loading','fetchpriority','decoding','width','height'):
+              tag = re.sub(r'\\s' + attr + r'\\s*=\\s*["\'][^"\']*["\']', '', tag, flags=re.I)
+          tag = tag[:-1] + f' width="{hero_w}" height="{hero_h}" loading="eager" fetchpriority="high" decoding="async">'
+          s = s[:m.start()] + tag + s[m.end():]
+
+          # Ensure exactly one preload for the hero image.
+          s = re.sub(r'\\s*<link\\s+rel=["\']preload["\'][^>]*as=["\']image["\'][^>]*>', '', s, flags=re.I)
+          preload = f'  <link rel="preload" as="image" href="assets/images/product-barley-canister.webp" fetchpriority="high">\n'
+          marker = '  <link rel="stylesheet" href="style.css?v=27">'
+          if marker in s:
+              s = s.replace(marker, preload + marker, 1)
+
+          # Give major below-fold image containers stable aspect ratios to reduce layout shifts.
+          s = s.replace('.simple-grain-frame img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}', '.simple-grain-frame img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}')
+          p.write_text(s, encoding='utf-8')
+          print(f'Hero WebP: {out} {out.stat().st_size} bytes {hero_w}x{hero_h}')
+          PY
+
+      - name: Verify
+        run: |
+          test -s assets/images/product-barley-canister.webp
+          grep -q 'product-barley-canister.webp' index.html
+          grep -q 'fetchpriority="high"' index.html
+          test "$(grep -c 'leslie-chat.js?v=2' index.html)" -eq 1
+          test "$(grep -c 'leslie-chat.js?v=1' index.html)" -eq 0
+          test "$(grep -c '<link rel="canonical"' index.html)" -eq 1
+
+      - name: Commit final optimization
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/images/product-barley-canister.webp
+          git commit -m "Optimize hero WebP and clean SEO duplicates [skip ci]" || exit 0
+          git push origin HEAD:main
+
+      - name: Remove one-time workflow
+        shell: bash
+        run: |
+          git rm .github/workflows/performance-finalize.yml
+          git commit -m "Remove one-time performance workflow [skip ci]" || exit 0
+          git push origin HEAD:main
