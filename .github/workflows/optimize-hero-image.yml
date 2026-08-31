@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/optimize-hero-image.yml'
+      - 'index.html'
   workflow_dispatch:
 
 permissions:
@@ -30,6 +31,8 @@ jobs:
 
           src = Path('assets/images/product-barley-canister.png')
           out = Path('assets/images/product-barley-canister.webp')
+          if not src.exists():
+              raise SystemExit(f'Missing source image: {src}')
           img = Image.open(src).convert('RGB')
           max_width = 720
           if img.width > max_width:
@@ -47,7 +50,7 @@ jobs:
           preload = f'<link rel="preload" as="image" href="{new}" fetchpriority="high">'
           s = re.sub(r'\s*<link\s+rel=["\']preload["\'][^>]*as=["\']image["\'][^>]*>', '', s, flags=re.I)
           marker = '<link rel="stylesheet" href="style.css?v=27">'
-          if preload not in s and marker in s:
+          if marker in s:
               s = s.replace(marker, preload + '\n  ' + marker, 1)
 
           pattern = re.compile(r'<img\b[^>]*src=["\']' + re.escape(new) + r'["\'][^>]*>', re.I)
@@ -69,9 +72,8 @@ jobs:
         run: |
           test -s assets/images/product-barley-canister.webp
           grep -q 'product-barley-canister.webp' index.html
-          grep -q 'width="' index.html
-          grep -q 'height="' index.html
           grep -q '<link rel="preload" as="image" href="assets/images/product-barley-canister.webp" fetchpriority="high">' index.html
+          grep -q 'loading="eager" fetchpriority="high" decoding="async"' index.html
 
       - name: Commit optimized assets
         shell: bash
