@@ -3,6 +3,11 @@ name: Optimize Performance Assets
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'performance.css'
+      - 'assets/images/*.png'
+      - '.github/workflows/optimize-performance-assets.yml'
 
 permissions:
   contents: write
@@ -25,11 +30,9 @@ jobs:
           import re
 
           root = Path('.')
-          images = root / 'assets' / 'images'
           index = root / 'index.html'
-
-          # Convert only large PNG assets that are actually used by the homepage.
           html = index.read_text(encoding='utf-8')
+
           png_refs = sorted(set(re.findall(r'assets/images/[^\"\']+\.png', html, flags=re.I)))
           converted = 0
           for ref in png_refs:
@@ -40,7 +43,6 @@ jobs:
               try:
                   with Image.open(src) as im:
                       im = im.convert('RGBA') if 'A' in im.getbands() else im.convert('RGB')
-                      # Keep enough resolution for desktop cards while avoiding multi-megapixel downloads.
                       max_side = 1400
                       if max(im.size) > max_side:
                           scale = max_side / max(im.size)
@@ -51,7 +53,6 @@ jobs:
               except Exception as exc:
                   print(f'WARN: could not convert {src}: {exc}')
 
-          # Add stable intrinsic dimensions to local homepage images to reduce CLS.
           def add_dimensions(match):
               tag = match.group(0)
               src_match = re.search(r'src=[\"\'](assets/images/[^\"\']+)[\"\']', tag)
@@ -71,7 +72,22 @@ jobs:
           index.write_text(html, encoding='utf-8')
 
           css = root / 'performance.css'
-          css.write_text('''/* Performance-only rules. Kept separate so layout styling stays untouched. */\n\n/* Avoid spending render time on sections far below the fold. */\n.products-section,\n.barley-wellness-section,\n.simple-grain-section,\n.discount-section,\n.more-than-section,\n.three-simple-steps-section,\n.stories-section,\n.barley-feature-section,\n#how-it-works,\n.inquiry-section {\n  content-visibility: auto;\n  contain-intrinsic-size: 900px;\n}\n\n/* Below-fold media should never compete with the hero request. */\n.products-section img,\n.barley-wellness-section img,\n.simple-grain-section img,\n.discount-section img,\n.stories-section img,\n.barley-feature-section img,\n#how-it-works img,\n.inquiry-section img {\n  content-visibility: auto;\n}\n''', encoding='utf-8')
+          css.write_text('''/* Performance-only rules. Kept separate so layout styling stays untouched. */
+
+.products-section,
+.barley-wellness-section,
+.simple-grain-section,
+.discount-section,
+.more-than-section,
+.three-simple-steps-section,
+.stories-section,
+.barley-feature-section,
+#how-it-works,
+.inquiry-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+''', encoding='utf-8')
 
           marker = '<link rel="stylesheet" href="performance.css?v=1">'
           if marker not in html:
@@ -81,14 +97,23 @@ jobs:
           print(f'Converted {converted} large PNG assets to WebP.')
           PY
 
-      - name: Commit optimized assets
+      - name: Commit optimized assets with retry
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/images/*.webp index.html performance.css
           if git diff --cached --quiet; then
             echo "No optimization changes needed."
-          else
-            git commit -m "Optimize homepage image payload"
-            git push
+            exit 0
           fi
+          git commit -m "Optimize homepage image payload"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; retrying..."
+            sleep $((attempt * 3))
+          done
+          echo "Unable to push optimized assets after retries."
+          exit 1
