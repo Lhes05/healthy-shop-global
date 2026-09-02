@@ -1,0 +1,62 @@
+name: Optimize Performance Assets
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for other site-edit workflows
+        run: sleep 90
+      - name: Optimize large PNG images
+        run: |
+          python -m pip install pillow
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          root = Path('.')
+          index = root / 'index.html'
+          html = index.read_text(encoding='utf-8')
+          for src in (root / 'assets' / 'images').glob('*.png'):
+              if src.stat().st_size < 300_000:
+                  continue
+              dst = src.with_suffix('.webp')
+              with Image.open(src) as im:
+                  im = im.convert('RGBA') if 'A' in im.getbands() else im.convert('RGB')
+                  if max(im.size) > 1400:
+                      scale = 1400 / max(im.size)
+                      im = im.resize((round(im.width * scale), round(im.height * scale)), Image.Resampling.LANCZOS)
+                  im.save(dst, 'WEBP', quality=82, method=6)
+              html = html.replace('assets/images/' + src.name, 'assets/images/' + dst.name)
+          index.write_text(html, encoding='utf-8')
+          Path('performance.css').write_text('''/* Performance optimizations */
+.products-section,
+.barley-wellness-section,
+.simple-grain-section,
+.discount-section,
+.more-than-section,
+.three-simple-steps-section,
+.stories-section,
+.barley-feature-section,
+#how-it-works,
+.inquiry-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+''', encoding='utf-8')
+          PY
+      - name: Commit optimization
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images/*.webp index.html performance.css
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Optimize homepage image payload"
+          git push origin main
