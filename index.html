@@ -20,4 +20,29 @@
 <section id="inquiry" class="growth-section"><div class="order-strip"><h2>Tell us what you're looking for.</h2><p>Need product information, ordering help, member information or distributor guidance? Send an inquiry and tell us what you need.</p><a class="btn alt" href="mailto:contact@mysante.com?subject=Sante%20Barley%20Inquiry">Send Inquiry →</a></div></section>
 </main><footer class="footer">Santé Philippines • Everyday Wellness</footer>
 <div style="padding:0 24px 30px;text-align:center;color:#52605a;font-size:14px">🌐 <a href="./" aria-current="page">English</a> · <a href="./ph/">Filipino</a></div>
+
+  <script>
+    /* CHAT MENU RESET STATE */
+    (function(){
+      const toggle=document.getElementById('helpChatToggle');
+      const options=document.querySelector('#helpChatPanel .help-chat-options');
+      const details=document.getElementById('helpOrderDetails');
+      if(!toggle||!options)return;
+      function resetMenu(){
+        options.style.display='grid';
+        if(details){
+          details.classList.remove('is-open');
+          details.setAttribute('aria-hidden','true');
+        }
+      }
+      toggle.addEventListener('click',function(){
+        if(toggle.getAttribute('aria-expanded') === 'true'){
+          resetMenu();
+        }
+      });
+      document.addEventListener('keydown',function(e){
+        if(e.key==='Escape') resetMenu();
+      });
+    })();
+  </script>
 </body></html>
